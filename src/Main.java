@@ -1,13 +1,59 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+/**
+ * Classe principal de entrada (Entry Point) do sistema hospitalar.
+ * Esta classe é responsável por orquestrar a inicialização do hospital,
+ * gerir o carregamento de dados a partir de ficheiros externos e
+ * instanciar a interface de utilizador (Menu).
+ * @author Gabriela Carneiro (202505760)
+ * @author Clara Soares (202504216)
+ */
+public class Main {
+    // O carregamento "estático" porque os nomes não mudam durante a execução.
+    /**
+     * Caminho fixo para o ficheiro que contém os dados das enfermarias
+     */
+    private static final String FICHEIRO_ENFERMARIAS = "Enfermaria.csv";
+    /**
+     * Caminho fixo para o ficheiro que contém os dados dos episódios de internamento
+     */
+    private static final String FICHEIRO_EPISODIOS = "Episodios.csv";
+    /**
+     * Nome do ficheiro destinado ao registo histórico (log) de erros e eventos do sistema
+     */
+    private static final String FILE_LOG = "hospital_sistema.log";
+
+    /**
+     * Ponto de partida da execução da aplicação.
+     * Realiza os seguintes passos:
+     * 1. Instancia a unidade hospitalar;
+     * 2. Configura o sistema de log em modo 'append' (acrescentar ao final);
+     * 3. Invoca os métodos de carga de dados utilizando as constantes definidas;
+     * 4. Lança o menu interativo para o utilizador.
+     * @param args Argumentos da linha de comandos (não utilizados neste projeto).
+     * @throws Exception Pode lançar exceções relacionadas com a leitura/escrita de ficheiros
+     * ou problemas lógicos no carregamento de dados.
+     */
+    public static void main(String[] args) throws Exception {
+        // Inicialização do Hospital
+        Hospital meuHospital = new Hospital("Hospital Central");
+
+        // Abre o PrintWritter com FileWriter(FILE_LOG, true) para não apagar o histórico anterior
+        PrintWriter logWriter = new PrintWriter(new FileWriter(FILE_LOG, true));
+
+        // Utilização das constantes para o carregamento automático
+        System.out.println(">>> [SISTEMA] A carregar ficheiros...");
+        meuHospital.carregarEnfermarias(FICHEIRO_ENFERMARIAS, logWriter);
+        meuHospital.carregarEpisodios(FICHEIRO_EPISODIOS, logWriter);
+        logWriter.close();
+
+
+        // O aviso de sucesso antes de entrar no menu
+        System.out.println(">>> [SISTEMA] Ficheiros carregados com sucesso!");
+
+        // Transição direta para o Menu interativo
+        Menu menuPrincipal = new Menu(meuHospital);
+        menuPrincipal.exibir();
     }
 }
