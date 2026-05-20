@@ -173,7 +173,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
      * Determina o tempo mínimo de internamento (LoS) entre os episódios finalizados.
      * @return Menor número de dias de internamento.
      */
-    public int minimo(){
+    public int determinarMinimo(){
         List<Episodio> lista = getEpisodiosAltas();
         if (lista.isEmpty()){
             return 0;
@@ -191,7 +191,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
      * Determina o tempo máximo de internamento (LoS) entre os episódios finalizados.
      * @return Maior número de dias de internamento.
      */
-    public int maximo(){
+    public int determinarMaximo(){
         List<Episodio> lista = getEpisodiosAltas();
         if (lista.isEmpty()){
             return 0;
@@ -209,7 +209,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
      * Calcula a média aritmética do tempo de permanência dos episódios com alta.
      * @return Média de dias de internamento.
      */
-    public double media(){
+    public double determinarMedia(){
         List<Episodio> lista = getEpisodiosAltas();
         if (lista.isEmpty()){
             return 0;
@@ -225,7 +225,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
      * Calcula o desvio padrão do tempo de permanência dos episódios com alta.
      * @return Valor do desvio padrão.
      */
-    public double desvioPadrao(){
+    public double determinarDesvioPadrao(){
         List<Episodio> lista = getEpisodiosAltas();
         int n = lista.size();
         if (n==0){
