@@ -1,50 +1,67 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class leitorEpisodios {
-    public static List<Enfermaria> ler(String "Enfermaria.csv") {
-        List<Enfermaria> enfermariasLidas = new ArrayList<>();
+    public static List<Enfermaria> ler(String "Enfermaria.csv", PrintWriter log) throws FileNotFoundException {
+        List<Enfermaria> lista = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader("Enfermaria.csv"))) {
-            String linha = br.readLine(); // Lê a primeira linha (cabeçalhos) e ignora
-            int numLinha = 1;
+        try {
+            Scanner leitor = new Scanner(new File("Enfermaria.csv"));
 
-            while ((linha = br.readLine()) != null) {
-                numLinha++;
-                // O -1 garante que colunas vazias no fim do CSV não rebentam o programa
-                String[] dados = linha.split(";", -1);
+            if (leitor.hasNextLine()) {
+                leitor.nextLine();
+            }
 
-                try {
-                    // Aqui colocas a tua lógica de extração atual, mas protegida!
-                    String id = dados[0].trim();
+            while (leitor.hasNextLine()) {
+                String linha = leitor.nextLine();
+
+                if (!linha.trim().isEmpty()) {
+                    String[] dados = linha.split(";", -1);
+
+                    String codigo = dados[0].trim();
                     String tipo = dados[1].trim();
                     int capacidade = Integer.parseInt(dados[2].trim());
 
-                    // Exemplo de instanciação protegida
                     if (tipo.equalsIgnoreCase("GERAL")) {
-                        // ... extrair recursos e numAcompanhantes
-                        // enfermariasLidas.add(new EnfermariaGeral(...));
-                    }
-                    // (Fazer os outros tipos: CI e Psiquiatrica)
+                        int numAcompanhantes = dados[4].trim().isEmpty() ? 0 : Integer.parseInt(dados[4].trim());
+                        List<String> recursosDisponiveis = Arrays.asList(dados[8].trim().split(",\\s*"));
+                        lista.add(new EnfermariaGeral(codigo, capacidade, numAcompanhantes, recursosDisponiveis));
 
-                } catch (NumberFormatException e) {
-                    System.err.println("Erro: Número inválido na linha " + numLinha + " do ficheiro Enfermarias.");
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Erro lógico na linha " + numLinha + ": " + e.getMessage());
+                    } else if (tipo.equalsIgnoreCase("PSIQ")) {
+                        String horarioVisitas = dados[3].trim();
+                        String nivelTxt = dados[5].trim();
+                        int nivelSeguranca = nivelTxt.equalsIgnoreCase("Alto") ? 3 : (nivelTxt.equalsIgnoreCase("Médio") ? 2 : 1);
+                        lista.add(new EnfermariaPsiquiatrica(codigo, capacidade, horarioVisitas, nivelSeguranca));
+
+                    } else if (tipo.equalsIgnoreCase("UCI")) {
+                        String horarioVisitas = dados[3].trim();
+                        double pressaoAtm = dados[6].trim().isEmpty() ? 0.0 : Double.parseDouble(dados[6].trim());
+                        double pressaoAtmRef = dados[7].trim().isEmpty() ? 0.0 : Double.parseDouble(dados[7].trim());
+                        lista.add(new EnfermariaCI(codigo, capacidade, horarioVisitas,pressaoAtm, pressaoAtmRef));
+
+                    }else{
+                        String erro = "LOG ERRO: Tipo de enfermaria inválido (" + tipo + ") na linha: " + linha;
+                        System.out.println(erro);
+                        log.println(LocalDate.now() + " | " + erro);
+                    }
+
                 }
+
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Ficheiro de enfermarias não encontrado: " + "\"Enfermaria.csv\"");
-        } catch (IOException e) {
-            System.err.println("Erro de leitura no ficheiro de enfermarias.");
+            leitor.close();
+
+
+        }catch (FileNotFoundException e) {
+            String erro = "ERRO CRÍTICO: O ficheiro " + "Episodios.csv"+ " não foi encontrado.";
+            System.out.println(erro);
+            log.println(LocalDate.now() + " | " + erro);
         }
 
-        return enfermariasLidas;
+        return lista;
     }
 }
 

@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -8,7 +9,7 @@ import java.time.temporal.ChronoUnit;
  * @author Gabriela Craneiro (202505760)
  * @author Clara Soares (202504216)
  */
-public class Episodio implements Comparable<Episodio>{
+public class Episodio implements Comparable<Episodio>, Serializable {
     /**
      * Identificador da cama utilizada durante o episódio
      */
@@ -29,6 +30,10 @@ public class Episodio implements Comparable<Episodio>{
      * @param dataAlta Data de fim do internamento (null se ainda internado).
      */
     public Episodio(int idCama, LocalDate dataAdmissao, LocalDate dataAlta) {
+
+        if (dataAlta != null & dataAlta.isAfter(dataAdmissao)){
+            throw new IllegalArgumentException("Erro: Data de alta anterior à admissão (Cama " + idCama + ").");
+        }
         this.idCama = idCama;
         this.dataAdmissao = dataAdmissao;
         this.dataAlta = dataAlta;

@@ -24,17 +24,6 @@ public class Main {
      */
     private static final String FILE_LOG = "hospital_sistema.log";
 
-    /**
-     * Ponto de partida da execução da aplicação.
-     * Realiza os seguintes passos:
-     * 1. Instancia a unidade hospitalar;
-     * 2. Configura o sistema de log em modo 'append' (acrescentar ao final);
-     * 3. Invoca os métodos de carga de dados utilizando as constantes definidas;
-     * 4. Lança o menu interativo para o utilizador.
-     * @param args Argumentos da linha de comandos (não utilizados neste projeto).
-     * @throws Exception Pode lançar exceções relacionadas com a leitura/escrita de ficheiros
-     * ou problemas lógicos no carregamento de dados.
-     */
     public static void main(String[] args) throws Exception {
         // Inicialização do Hospital
         Hospital meuHospital = new Hospital("Hospital Central");
@@ -44,8 +33,8 @@ public class Main {
 
         // Utilização das constantes para o carregamento automático
         System.out.println(">>> [SISTEMA] A carregar ficheiros...");
-        meuHospital.carregarEnfermarias(FICHEIRO_ENFERMARIAS, logWriter);
-        meuHospital.carregarEpisodios(FICHEIRO_EPISODIOS, logWriter);
+        meuHospital.setEnfermarias(leitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter));
+        leitorEpisodios.lerEpisodios("Episodios.csv", meuHospital, logWriter);
         logWriter.close();
 
 
