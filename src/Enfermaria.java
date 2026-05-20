@@ -107,6 +107,21 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         return calcularTaxaOcupacao(dataRef) > LIMIAR_DE_PRESSAO;
     }
 
+    public String obterBarraASCII (double percentagem){
+        if (percentagem <0) {
+            double pergentagem = 0;
+        }
+
+        int numCaracteres = (int) Math.round ((percentagem*50)/100);
+
+        StringBuilder barra = new StringBuilder();
+        for (int i=0; i<numCaracteres; i++){
+            barra.append("#");
+        }
+
+        return barra.toString();
+    }
+
     /**
      * Devolve uma representação textual da enfermaria, incluindo código,
      * capacidade e taxa de ocupação atual.
@@ -119,6 +134,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         s.append ("\nCapacidade: ").append(capacidadeCamas).append("camas");
         double taxaHoje = calcularTaxaOcupacao(LocalDate.now());
         s.append ("\nTaxa de Ocupação: ").append(String.format("%.2f", taxaHoje)).append("%");
+        s.append("\nGráfico Ocupação: [").append(obterBarraASCII(taxaHoje)).append("]");
         return s.toString();
     }
 
