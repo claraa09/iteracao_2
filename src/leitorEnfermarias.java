@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class leitorEpisodios {
-    public static List<Enfermaria> ler(String "Enfermaria.csv", PrintWriter log) throws FileNotFoundException {
+public class leitorEnfermarias {
+    public static List<Enfermaria> lerEnfermarias(String caminho, PrintWriter log) throws FileNotFoundException {
         List<Enfermaria> lista = new ArrayList<>();
 
         try {
-            Scanner leitor = new Scanner(new File("Enfermaria.csv"));
+            Scanner leitor = new Scanner(new File(caminho));
 
             if (leitor.hasNextLine()) {
                 leitor.nextLine();
