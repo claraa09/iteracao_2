@@ -53,6 +53,7 @@ public class Menu {
             System.out.println("3. Listar Episódios de uma Enfermaria (Ordenados para data de Admissão)");
             System.out.println("4. Consultar Ocupação em Data Específica");
             System.out.println("5. Calcular Percentagem de Pressão (Período)");
+            System.out.println("6. Alterar a capacidade das camas");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -75,6 +76,9 @@ public class Menu {
                 }
                 else if (opcao == 5) {
                     menuAnalisePressao();
+                }
+                else if (opcao == 6) {
+                    alterarCamas();
                 }
                 else if (opcao == 0) {
                     System.out.println("A encerrar o sistema... Até à próxima!");
@@ -178,5 +182,14 @@ public class Menu {
 
         double perc = hospital.calcularPercentagemPressao(id, inicio, fim);
         System.out.println("\nRESULTADO: Pressão em " + String.format("%.2f", perc) + "% do tempo.");
+    }
+
+    private void alterarCamas(){
+        System.out.print("Insira a percentagem de alteração (ex: 10 para aumentar, -5 para diminuir): ");
+        double percentagem = teclado.nextDouble();
+
+        Enfermaria.alterarCamasTotais(hospital.getEnfermarias(), percentagem);
+
+        System.out.println("Capacidade de todas as enfermarias atualizada com sucesso!");
     }
 }

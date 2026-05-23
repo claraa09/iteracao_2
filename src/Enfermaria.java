@@ -122,6 +122,32 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         return barra.toString();
     }
 
+    public static void alterarCamasTotais(List<Enfermaria> listaEnfermarias, double percentagemVariacao) {
+        // Validação por segurança
+        if (listaEnfermarias == null || listaEnfermarias.isEmpty()) {
+            return;
+        }
+
+        // Percorre todas as enfermarias da lista
+        for (Enfermaria enf : listaEnfermarias) {
+            int capacidadeAtual = enf.getCapacidadeCamas();
+
+            // Calcula a variação. Ex: se capacidade=100 e percentagem=10 -> variacao = 10
+            double variacao = capacidadeAtual * (percentagemVariacao / 100.0);
+
+            // Nova capacidade será a atual + variação (arredondada para inteiros, pois não há meias camas)
+            int novaCapacidade = (int) Math.round(capacidadeAtual + variacao);
+
+            // Salvaguarda para garantir que o hospital não fica com camas negativas
+            if (novaCapacidade < 0) {
+                novaCapacidade = 0;
+            }
+
+            // Atualiza o objeto usando o setter que já tens na classe
+            enf.setCapacidadeCamas(novaCapacidade);
+        }
+    }
+
     /**
      * Devolve uma representação textual da enfermaria, incluindo código,
      * capacidade e taxa de ocupação atual.
