@@ -125,19 +125,20 @@ public class Hospital {
         return (totalDias == 0) ? 0.0 : ((double) diasEmPressao / totalDias) * 100;
     }
 
-    public double calcularPercentagemEnfermariasEmPressao(LocalDate dataRef) {
-        if (this.enfermarias == null || this.enfermarias.isEmpty()) {
+    public static double calcularPercentagemEnfermariasEmPressao(List<Enfermaria> lista, LocalDate dataRef) {
+        if (lista == null || lista.isEmpty()) {
             return 0.0;
         }
 
         int contadorPressao = 0;
 
-        for (Enfermaria enf : this.enfermarias) {
+        // Percorre a lista que veio por parâmetro (já não usa 'this')
+        for (Enfermaria enf : lista) {
             if (enf.emPressao(dataRef)) {
                 contadorPressao++;
             }
         }
 
-        return ((double) contadorPressao / this.enfermarias.size()) * 100.0;
+        return ((double) contadorPressao / lista.size()) * 100.0;
     }
 }
