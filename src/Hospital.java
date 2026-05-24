@@ -125,6 +125,24 @@ public class Hospital {
         return (totalDias == 0) ? 0.0 : ((double) diasEmPressao / totalDias) * 100;
     }
 
+    public static void alterarCamasTotais(List<Enfermaria> listaEnfermarias, double percentagemVariacao) {
+        if (listaEnfermarias == null || listaEnfermarias.isEmpty()) {
+            return;
+        }
+
+        for (Enfermaria enf : listaEnfermarias) {
+            int capacidadeAtual = enf.getCapacidadeCamas();
+            double variacao = capacidadeAtual * (percentagemVariacao / 100.0);
+            int novaCapacidade = (int) Math.round(capacidadeAtual + variacao);
+
+            if (novaCapacidade < 0) {
+                novaCapacidade = 0;
+            }
+
+            enf.setCapacidadeCamas(novaCapacidade);
+        }
+    }
+
     public static double calcularPercentagemEnfermariasEmPressao(List<Enfermaria> lista, LocalDate dataRef) {
         if (lista == null || lista.isEmpty()) {
             return 0.0;

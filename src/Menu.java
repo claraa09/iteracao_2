@@ -192,7 +192,7 @@ public class Menu {
         System.out.print("Insira a percentagem de alteração (ex: 10 para aumentar, -5 para diminuir): ");
         double percentagem = teclado.nextDouble();
 
-        Enfermaria.alterarCamasTotais(hospital.getEnfermarias(), percentagem);
+        Hospital.alterarCamasTotais(hospital.getEnfermarias(), percentagem);
 
         System.out.println("Capacidade de todas as enfermarias atualizada com sucesso!");
     }
