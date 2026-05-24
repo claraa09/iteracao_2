@@ -204,7 +204,7 @@ public class Menu {
         try {
             LocalDate data = LocalDate.parse(dataLida, formato);
 
-            double percentagem = hospital.calcularPercentagemEnfermariasEmPressao(data);
+            double percentagem = Hospital.calcularPercentagemEnfermariasEmPressao(hospital.getEnfermarias(), data);
 
             System.out.println("\n--- ANÁLISE DE PRESSÃO GLOBAL ---");
             System.out.printf("Em %s, %.2f%% das enfermarias do hospital estavam em esforço crítico (>85%%).%n",
