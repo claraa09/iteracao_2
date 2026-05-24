@@ -54,6 +54,7 @@ public class Menu {
             System.out.println("4. Consultar Ocupação em Data Específica");
             System.out.println("5. Calcular Percentagem de Pressão (Período)");
             System.out.println("6. Alterar a capacidade das camas");
+            System.out.println("7. Calcular a percentagem de pressão global das enfermarias");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -79,6 +80,9 @@ public class Menu {
                 }
                 else if (opcao == 6) {
                     alterarCamas();
+                }
+                else if (opcao == 7) {
+                    calcularPercentagemPressaoGlobal();
                 }
                 else if (opcao == 0) {
                     System.out.println("A encerrar o sistema... Até à próxima!");
@@ -191,5 +195,23 @@ public class Menu {
         Enfermaria.alterarCamasTotais(hospital.getEnfermarias(), percentagem);
 
         System.out.println("Capacidade de todas as enfermarias atualizada com sucesso!");
+    }
+
+    private void calcularPercentagemPressaoGlobal() {
+        System.out.print("Introduza a data de referência (dd/MM/yyyy): ");
+        String dataLida = teclado.nextLine();
+
+        try {
+            LocalDate data = LocalDate.parse(dataLida, formato);
+
+            double percentagem = hospital.calcularPercentagemEnfermariasEmPressao(data);
+
+            System.out.println("\n--- ANÁLISE DE PRESSÃO GLOBAL ---");
+            System.out.printf("Em %s, %.2f%% das enfermarias do hospital estavam em esforço crítico (>85%%).%n",
+                    data.format(formato), percentagem);
+
+        } catch (Exception e) {
+            System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
+        }
     }
 }
