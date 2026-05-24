@@ -124,4 +124,20 @@ public class Hospital {
         }
         return (totalDias == 0) ? 0.0 : ((double) diasEmPressao / totalDias) * 100;
     }
+
+    public double calcularPercentagemEnfermariasEmPressao(LocalDate dataRef) {
+        if (this.enfermarias == null || this.enfermarias.isEmpty()) {
+            return 0.0;
+        }
+
+        int contadorPressao = 0;
+
+        for (Enfermaria enf : this.enfermarias) {
+            if (enf.emPressao(dataRef)) {
+                contadorPressao++;
+            }
+        }
+
+        return ((double) contadorPressao / this.enfermarias.size()) * 100.0;
+    }
 }
