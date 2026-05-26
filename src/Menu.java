@@ -63,35 +63,27 @@ public class Menu {
                 opcao = teclado.nextInt();
                 teclado.nextLine(); // Limpar o buffer do teclado
 
-                if (opcao == 1) {
-                    menuListarEnfermarias();
-                }
-                else if (opcao == 2) {
-                    menuEstatisticasLoS();
-                }
-                else if (opcao == 3) {
-                    menuListarEpisodios();
-                }
-                else if (opcao == 4) {
-                    menuOcupacaoData();
-                }
-                else if (opcao == 5) {
-                    menuAnalisePressao();
-                }
-                else if (opcao == 6){
-                    escolherRegisto();
-                }
-                else if (opcao == 7) {
-                    alterarCamas();
-                }
-                else if (opcao == 8) {
-                    calcularPercentagemPressaoGlobal();
-                }
-                else if (opcao == 0) {
-                    System.out.println("A encerrar o sistema... Até à próxima!");
-                }
-                else {
-                    System.out.println("Opção inválida! Tente um número entre 0 e 5.");
+                switch (opcao){
+                    case 1:
+                        menuListarEnfermarias();
+                    case 2:
+                        menuEstatisticasLoS();
+                    case 3:
+                        menuListarEpisodios();
+                    case 4:
+                        menuOcupacaoData();
+                    case 5:
+                        menuAnalisePressao();
+                    case 6:
+                        escolherRegisto();
+                    case 7:
+                        alterarCamas();
+                    case 8:
+                        calcularPercentagemPressaoGlobal();
+                    case 0:
+                        System.out.println ("A encerrar o sistema... Até à próxima!");
+                    default:
+                        System.out.println("Opção inválida! Tente um número entre 0 e 8.");
                 }
             } else {
                 System.out.println("Erro: Por favor, insira apenas números.");
@@ -200,27 +192,21 @@ public class Menu {
             System.out.println("0. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
 
-            if (teclado.hasNextInt()) {
-                opcao = teclado.nextInt();
-                teclado.nextLine(); // Limpar buffer
-
-                if (opcao == 1) {
+            switch (opcao){
+                case 1:
                     inserirEpisodio();
-                }
-                else if (opcao == 2) {
+                case 2:
                     inserirEnfermaria();
-                }
-                else if (opcao == 0){
+                case 0:
                     exibir();
-                }
-                else {
-                    System.out.println("Opção inválida.");
-                }
+                default:
+                    System.out.println("Opção inválida");
+            }
             } else {
                 System.out.println("Erro: Insira um número.");
                 teclado.next(); // Limpar entrada inválida
             }
-        } while (opcao != 0);
+        } while(opcao != 0);
     }
 
     private void inserirEpisodio() {
