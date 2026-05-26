@@ -53,8 +53,10 @@ public class Menu {
             System.out.println("3. Listar Episódios de uma Enfermaria (Ordenados para data de Admissão)");
             System.out.println("4. Consultar Ocupação em Data Específica");
             System.out.println("5. Calcular Percentagem de Pressão (Período)");
-            System.out.println("6. Alterar a capacidade das camas");
-            System.out.println("7. Calcular a percentagem de pressão global das enfermarias");
+            System.out.println ("6. Inserir um novo registo");
+            System.out.println("7. Alterar a capacidade das camas");
+            System.out.println("8. Calcular a percentagem de pressão global das enfermarias");
+            System.out.println("9. Visualizar Gráfico de Barras (Ocupação");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -80,6 +82,8 @@ public class Menu {
                         alterarCamas();
                     case 8:
                         calcularPercentagemPressaoGlobal();
+                    case 9:
+                        menuGraficoBarras();
                     case 0:
                         System.out.println ("A encerrar o sistema... Até à próxima!");
                     default:
@@ -195,16 +199,16 @@ public class Menu {
             if (teclado.hasNextInt()) {
                 opcao = teclado.nextInt();
                 teclado.nextLine();
-            switch (opcao){
-                case 1:
-                    inserirEpisodio();
-                case 2:
-                    inserirEnfermaria();
-                case 0:
-                    exibir();
-                default:
-                    System.out.println("Opção inválida");
-            }
+                switch (opcao){
+                    case 1:
+                        inserirEpisodio();
+                    case 2:
+                        inserirEnfermaria();
+                    case 0:
+                        exibir();
+                    default:
+                        System.out.println("Opção inválida");
+                }
             } else {
                 System.out.println("Erro: Insira um número.");
                 teclado.next(); // Limpar entrada inválida
@@ -245,5 +249,29 @@ public class Menu {
         } catch (Exception e) {
             System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
         }
+    }
+
+    private void menuGraficoBarras() {
+        System.out.print("Introduza o código da enfermaria: ");
+        String cod = teclado.nextLine();
+
+        System.out.print("Data de Início (dd/MM/yyyy): ");
+        String dataInicio = teclado.nextLine();
+
+        System.out.print("Data de Fim (dd/MM/yyyy): ");
+        String dataFim = teclado.nextLine();
+
+        char simbolo = '#';
+
+        System.out.println("\nOrientação:");
+        System.out.println("1. Horizontal");
+        System.out.println("2. Vertical");
+        System.out.print("Escolha: ");
+
+        int orientacao = 1;
+        if (teclado.hasNextInt()) {
+            orientacao = teclado.nextInt();
+        }
+        teclado.nextLine();
     }
 }

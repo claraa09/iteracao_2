@@ -107,7 +107,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         return calcularTaxaOcupacao(dataRef) > LIMIAR_DE_PRESSAO;
     }
 
-    public String obterBarraASCII (double percentagem){
+    public String obterBarraASCII (double percentagem, char simbolo){
         if (percentagem <0) {
             double pergentagem = 0;
         }
@@ -116,7 +116,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
 
         StringBuilder barra = new StringBuilder();
         for (int i=0; i<numCaracteres; i++){
-            barra.append("#");
+            barra.append(simbolo);
         }
 
         return barra.toString();
