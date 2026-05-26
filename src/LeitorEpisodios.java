@@ -8,12 +8,12 @@ public class LeitorEpisodios {
 
     // Repara que recebe o caminho E o objeto hospital
     public static void lerEpisodios(String caminho, Hospital hospital, PrintWriter log) {
-        DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try {
             Scanner leitor = new Scanner(caminho);
 
-            if (leitor.hasNextLine()){
+            if (leitor.hasNextLine()) {
                 leitor.nextLine();
             }
 
@@ -83,7 +83,7 @@ public class LeitorEpisodios {
             String erro = "ERRO CRÍTICO: O ficheiro de episódios (" + caminho + ") não foi encontrado.";
             System.out.println(erro);
             log.println(LocalDate.now() + " | " + erro);
-
         }
+
     }
 }
