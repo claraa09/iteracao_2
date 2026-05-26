@@ -210,7 +210,10 @@ public class Menu {
                 else if (opcao == 2) {
                     inserirEnfermaria();
                 }
-                else if (opcao != 0) {
+                else if (opcao == 0){
+                    exibir();
+                }
+                else {
                     System.out.println("Opção inválida.");
                 }
             } else {
