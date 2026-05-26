@@ -1,5 +1,6 @@
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 
 /**
  * Classe principal de entrada (Entry Point) do sistema hospitalar.

@@ -11,7 +11,7 @@ public class LeitorEpisodios {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try {
-            Scanner leitor = new Scanner(caminho);
+            Scanner leitor = new Scanner ( new File(caminho));
 
             if (leitor.hasNextLine()) {
                 leitor.nextLine();
@@ -29,7 +29,7 @@ public class LeitorEpisodios {
                     if (dados.length < 4) {
                         String erro = "LOG ERRO: Colunas insuficientes na linha " + numLinha + ": " + linha;
                         System.out.println(erro);
-                        log.println(LocalDate.now() + " | " + erro);
+                        if (log != null) log.println(LocalDate.now() + " | " + erro);
                         continue;
                     }
 
@@ -58,22 +58,22 @@ public class LeitorEpisodios {
                                 // Captura validações de negócio do construtor de Episodio (ex: alta anterior à admissão)
                                 String erro = "LOG ERRO (Linha " + numLinha + "): " + e.getMessage();
                                 System.out.println(erro);
-                                log.println(LocalDate.now() + " | " + erro);
+                                if (log != null) log.println(LocalDate.now() + " | " + erro);
                             }
                         } else {
                             String erro = "LOG ERRO (Linha " + numLinha + "): Enfermaria " + idEnf + " não encontrada no sistema.";
                             System.out.println(erro);
-                            log.println(LocalDate.now() + " | " + erro);
+                            if (log != null) log.println(LocalDate.now() + " | " + erro);
                         }
 
                     } catch (NumberFormatException e) {
                         String erro = "LOG ERRO: Identificador de cama inválido na linha " + numLinha + ".";
                         System.out.println(erro);
-                        log.println(LocalDate.now() + " | " + erro);
+                        if (log != null) log.println(LocalDate.now() + " | " + erro);
                     } catch (DateTimeParseException e) {
                         String erro = "LOG ERRO: Formato de data incorreto na linha " + numLinha + ". Use dd/MM/yyyy.";
                         System.out.println(erro);
-                        log.println(LocalDate.now() + " | " + erro);
+                        if (log!= null) log.println(LocalDate.now() + " | " + erro);
                     }
                 }
             }
@@ -84,6 +84,5 @@ public class LeitorEpisodios {
             System.out.println(erro);
             log.println(LocalDate.now() + " | " + erro);
         }
-
     }
 }

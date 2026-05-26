@@ -122,9 +122,9 @@ public class Menu {
         System.out.println("\n--- INDICADORES DE DESEMPENHO (LoS) ---");
         for (Enfermaria e : hospital.getEnfermarias()) {
             System.out.println("Enfermaria " + e.getCodigo() + ":");
-            System.out.println("   Média: " + String.format("%.2f", e.media()) + " dias");
-            System.out.println("   Mínimo: " + e.minimo() + " | Máximo: " + e.maximo());
-            System.out.println("   Desvio Padrão: " + String.format("%.2f", e.desvioPadrao()));
+            System.out.println("   Média: " + String.format("%.2f", e.determinarMedia()) + " dias");
+            System.out.println("   Mínimo: " + e.determinarMinimo() + " | Máximo: " + e.determinarMaximo());
+            System.out.println("   Desvio Padrão: " + String.format("%.2f", e.determinarDesvioPadrao()));
         }
     }
 

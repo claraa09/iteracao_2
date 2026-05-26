@@ -247,7 +247,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         if (n==0){
             return 0.0;
         }
-        double media = media();
+        double media = determinarMedia();
         double somaQuadrados = 0;
         for (Episodio e: lista){
             somaQuadrados += Math.pow(e.calcularLos() - media, 2);

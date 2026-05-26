@@ -11,23 +11,23 @@ public interface EstatisticaInternamento {
      * Calcula a média aritmética do tempo de permanência (LoS) dos pacientes.
      * @return O valor médio de dias de internamento. Devolve 0.0 se não existirem episódios com alta.
      */
-    double media();
+    double determinarMedia();
 
     /**
      * Calcula o desvio padrão do tempo de permanência, indicando a dispersão dos dados em relação à média.
      * @return O valor do desvio padrão. Devolve 0.0 se a lista de episódios for insuficiente para o cálculo.
      */
-    double desvioPadrao();
+    double determinarDesvioPadrao();
 
     /**
      * Identifica o menor tempo de internamento registado na unidade.
      * @return O número mínimo de dias que um paciente esteve internado.
      */
-    int minimo();
+    int determinarMinimo();
 
     /**
      * Identifica o maior tempo de internamento registado na unidade.
      * @return O número máximo de dias que um paciente esteve internado.
      */
-    int maximo();
+    int determinarMaximo();
 }
