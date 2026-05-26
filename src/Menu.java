@@ -192,6 +192,9 @@ public class Menu {
             System.out.println("0. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
 
+            if (teclado.hasNextInt()) {
+                opcao = teclado.nextInt();
+                teclado.nextLine();
             switch (opcao){
                 case 1:
                     inserirEpisodio();
@@ -206,7 +209,7 @@ public class Menu {
                 System.out.println("Erro: Insira um número.");
                 teclado.next(); // Limpar entrada inválida
             }
-        } while(opcao != 0);
+        } while (opcao != 0);
     }
 
     private void inserirEpisodio() {
