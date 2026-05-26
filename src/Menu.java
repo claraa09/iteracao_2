@@ -78,10 +78,13 @@ public class Menu {
                 else if (opcao == 5) {
                     menuAnalisePressao();
                 }
-                else if (opcao == 6) {
-                    alterarCamas();
+                else if (opcao == 6){
+                    escolherRegisto();
                 }
                 else if (opcao == 7) {
+                    alterarCamas();
+                }
+                else if (opcao == 8) {
                     calcularPercentagemPressaoGlobal();
                 }
                 else if (opcao == 0) {
@@ -186,6 +189,46 @@ public class Menu {
 
         double perc = hospital.calcularPercentagemPressao(id, inicio, fim);
         System.out.println("\nRESULTADO: Pressão em " + String.format("%.2f", perc) + "% do tempo.");
+    }
+
+    private void escolherRegisto() {
+        int opcao = -1;
+        do {
+            System.out.println("\n--- SUB-MENU INSERÇÃO ---");
+            System.out.println("1. Inserir novo Episódio");
+            System.out.println("2. Inserir nova Enfermaria");
+            System.out.println("0. Voltar ao Menu Principal");
+            System.out.print("Escolha uma opção: ");
+
+            if (teclado.hasNextInt()) {
+                opcao = teclado.nextInt();
+                teclado.nextLine(); // Limpar buffer
+
+                if (opcao == 1) {
+                    inserirEpisodio();
+                }
+                else if (opcao == 2) {
+                    inserirEnfermaria();
+                }
+                else if (opcao == 0){
+                    exibir();
+                }
+                else {
+                    System.out.println("Opção inválida.");
+                }
+            } else {
+                System.out.println("Erro: Insira um número.");
+                teclado.next(); // Limpar entrada inválida
+            }
+        } while (opcao != 0);
+    }
+
+    private void inserirEpisodio() {
+
+    }
+
+    private void inserirEnfermaria (){
+
     }
 
     private void alterarCamas(){
