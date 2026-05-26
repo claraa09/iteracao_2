@@ -2,3 +2,15 @@
 2026-05-26 | LOG ERRO: Tipo de enfermaria inválido (ERRO) na linha: E05;ERRO;-5;;0;;;;Dados Invalidos
 2026-05-26 | LOG ERRO: Tipo de enfermaria inválido (ERRO) na linha: E05;ERRO;-5;;0;;;;Dados Invalidos
 2026-05-26 | LOG ERRO: Tipo de enfermaria inválido (ERRO) na linha: E05;ERRO;-5;;0;;;;Dados Invalidos
+2026-05-26 | LOG ERRO (Linha 2): Capacidade inválida -> 20
+2026-05-26 | LOG ERRO (Linha 3): Capacidade inválida -> 10
+2026-05-26 | LOG ERRO (Linha 4): Capacidade inválida -> 5
+2026-05-26 | LOG ERRO (Linha 5): Capacidade inválida -> 15
+2026-05-26 | LOG ERRO (Linha 6): Capacidade inválida -> -5
+2026-05-26 | LOG ERRO (Linha 7): Capacidade inválida -> 12
+2026-05-26 | LOG ERRO (Linha 2): Capacidade inválida -> 20
+2026-05-26 | LOG ERRO (Linha 3): Capacidade inválida -> 10
+2026-05-26 | LOG ERRO (Linha 4): Capacidade inválida -> 5
+2026-05-26 | LOG ERRO (Linha 5): Capacidade inválida -> 15
+2026-05-26 | LOG ERRO (Linha 6): Capacidade inválida -> -5
+2026-05-26 | LOG ERRO (Linha 7): Capacidade inválida -> 12

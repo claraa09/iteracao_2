@@ -159,4 +159,25 @@ public class Hospital {
 
         return ((double) contadorPressao / lista.size()) * 100.0;
     }
+
+    /**
+     * Procura uma enfermaria na lista do hospital através do seu código identificador.
+     * @param codigo O código da enfermaria a pesquisar (ex: "E01").
+     * @return O objeto Enfermaria encontrado, ou null se não existir.
+     */
+    public Enfermaria pesquisarEnfermaria(String codigo) {
+        if (codigo == null || this.enfermarias == null) {
+            return null;
+        }
+
+        // Percorre a lista de enfermarias do hospital
+        for (Enfermaria e : this.enfermarias) {
+            // Ignora maiúsculas/minúsculas e espaços extras
+            if (e.getCodigo().equalsIgnoreCase(codigo.trim())) {
+                return e; // Encontrou! Devolve a enfermaria imediatamente
+            }
+        }
+
+        return null; // Se percorreu tudo e não encontrou, devolve null
+    }
 }

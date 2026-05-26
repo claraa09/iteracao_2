@@ -212,7 +212,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         if (lista.isEmpty()){
             return 0;
         }
-        int max = lista.getFirst().calcularLos();
+        int max = lista.get(0).calcularLos();
         for(Episodio e : lista){
             if (e.calcularLos()> max){
                 max =e.calcularLos();

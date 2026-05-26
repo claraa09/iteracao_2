@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,11 +9,11 @@ import java.util.Scanner;
 public class LeitorEpisodios {
 
     // Repara que recebe o caminho E o objeto hospital
-    public static void lerEpisodios(String caminho, Hospital hospital, PrintWriter log) {
+    public static void lerEpisodios(String caminho, Hospital hospital, PrintWriter log) throws FileNotFoundException {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try {
-            Scanner leitor = new Scanner ( new File(caminho));
+            Scanner leitor = new Scanner(new File(caminho));
 
             if (leitor.hasNextLine()) {
                 leitor.nextLine();
@@ -26,63 +28,58 @@ public class LeitorEpisodios {
                     String[] dados = linha.split(";", -1);
 
                     // Validação estrutural básica da linha
-                    if (dados.length < 4) {
-                        String erro = "LOG ERRO: Colunas insuficientes na linha " + numLinha + ": " + linha;
-                        System.out.println(erro);
-                        if (log != null) log.println(LocalDate.now() + " | " + erro);
+                    if (dados.length < 4) continue;
+
+                    String codigo = dados[0].trim();
+                    String idCamaTxt = dados[1].trim();
+                    String dataAdmTxt = dados[2].trim();
+                    String dataAltaTxt = dados[3].trim();
+
+                    // 1. VALIDAÇÕES: Usar a nossa nova classe
+                    if (!Validador.isInteiro(idCamaTxt)) {
+                        System.err.println("Erro na linha " + numLinha + ": ID da Cama não é um número.");
+                        continue;
+                    }
+                    if (!Validador.isData(dataAdmTxt)) {
+                        System.err.println("Erro na linha " + numLinha + ": Data de Admissão inválida.");
+                        continue;
+                    }
+                    if (!dataAltaTxt.isEmpty() && !Validador.isData(dataAltaTxt)) {
+                        System.err.println("Erro na linha " + numLinha + ": Data de Alta inválida.");
                         continue;
                     }
 
-                    try {
-                        String idEnf = dados[0].trim();
-                        int idCama = Integer.parseInt(dados[1].trim());
-                        LocalDate dataAdm = LocalDate.parse(dados[2].trim(), formato);
+                    // 2. CONVERSÃO SEGURA (Nenhum try-catch de formatação é necessário aqui agora!)
+                    int idCama = Integer.parseInt(idCamaTxt);
+                    LocalDate dataAd = LocalDate.parse(dataAdmTxt, Validador.FORMATO);
 
-                        // Trata o campo vazio caso o paciente ainda esteja internado (sem data de alta)
-                        LocalDate dataAlta = dados[3].trim().isEmpty() ? null : LocalDate.parse(dados[3].trim(), formato);
+                    LocalDate dataAlta = null;
+                    if (!dataAltaTxt.isEmpty()) {
+                        dataAlta = LocalDate.parse(dataAltaTxt, Validador.FORMATO);
+                    }
 
-                        // Procura a enfermaria correspondente dentro do hospital
-                        Enfermaria alvo = null;
-                        for (Enfermaria e : hospital.getEnfermarias()) {
-                            if (e.getCodigo().equalsIgnoreCase(idEnf)) {
-                                alvo = e;
-                                break;
-                            }
-                        }
-
-                        // Se encontrar a enfermaria, tenta instanciar e adicionar o episódio
-                        if (alvo != null) {
-                            try {
-                                alvo.getEpisodios().add(new Episodio(idCama, dataAdm, dataAlta));
-                            } catch (IllegalArgumentException e) {
-                                // Captura validações de negócio do construtor de Episodio (ex: alta anterior à admissão)
-                                String erro = "LOG ERRO (Linha " + numLinha + "): " + e.getMessage();
-                                System.out.println(erro);
-                                if (log != null) log.println(LocalDate.now() + " | " + erro);
-                            }
-                        } else {
-                            String erro = "LOG ERRO (Linha " + numLinha + "): Enfermaria " + idEnf + " não encontrada no sistema.";
+                    // 3. Lógica normal de procurar no hospital e adicionar
+                    Enfermaria alvo = hospital.pesquisarEnfermaria(codigo);
+                    if (alvo != null) {
+                        try {
+                            alvo.getEpisodios().add(new Episodio(idCama, dataAd, dataAlta));
+                        } catch (IllegalArgumentException e) {
+                            String erro = "LOG ERRO (Linha " + numLinha + "): " + e.getMessage();
                             System.out.println(erro);
                             if (log != null) log.println(LocalDate.now() + " | " + erro);
                         }
-
-                    } catch (NumberFormatException e) {
-                        String erro = "LOG ERRO: Identificador de cama inválido na linha " + numLinha + ".";
+                    } else {
+                        String erro = "LOG ERRO (Linha " + numLinha + "): Enfermaria " + codigo + " não encontrada.";
                         System.out.println(erro);
                         if (log != null) log.println(LocalDate.now() + " | " + erro);
-                    } catch (DateTimeParseException e) {
-                        String erro = "LOG ERRO: Formato de data incorreto na linha " + numLinha + ". Use dd/MM/yyyy.";
-                        System.out.println(erro);
-                        if (log!= null) log.println(LocalDate.now() + " | " + erro);
                     }
                 }
             }
-            leitor.close();
-
         } catch (FileNotFoundException e) {
-            String erro = "ERRO CRÍTICO: O ficheiro de episódios (" + caminho + ") não foi encontrado.";
+            String erro = "ERRO CRÍTICO: O ficheiro " + caminho + " não foi encontrado.";
             System.out.println(erro);
-            log.println(LocalDate.now() + " | " + erro);
+            if (log != null) log.println(LocalDate.now() + " | " + erro);
         }
+
     }
 }
