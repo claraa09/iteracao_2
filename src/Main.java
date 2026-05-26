@@ -33,8 +33,8 @@ public class Main {
 
         // Utilização das constantes para o carregamento automático
         System.out.println(">>> [SISTEMA] A carregar ficheiros...");
-        meuHospital.setEnfermarias(leitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter));
-        leitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter);
+        meuHospital.setEnfermarias(LeitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter));
+        LeitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter);
         logWriter.close();
 
 

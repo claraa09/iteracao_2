@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class leitorEnfermarias {
+public class LeitorEnfermarias {
     public static List<Enfermaria> lerEnfermarias(String caminho, PrintWriter log) throws FileNotFoundException {
         List<Enfermaria> lista = new ArrayList<>();
 
