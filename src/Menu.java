@@ -159,6 +159,11 @@ public class Menu {
     private void menuOcupacaoData() {
         System.out.print("Introduza a data de análise (dd/MM/yyyy): ");
         String dataLida = teclado.nextLine();
+
+        while (!Validador.isData(dataLida)) {
+            System.out.print("Erro: Formato inválido. Reintroduza a data (dd/MM/yyyy): ");
+            dataLida = teclado.nextLine();
+        }
         LocalDate data = LocalDate.parse(dataLida, formato);
 
         System.out.println("\nTAXA DE OCUPAÇÃO EM " + data.format(formato) + ":");
@@ -174,16 +179,34 @@ public class Menu {
      */
     private void menuAnalisePressao() {
         System.out.print("ID da Enfermaria: ");
-        String id = teclado.nextLine();
+        String id = teclado.nextLine().trim();
+
+        Enfermaria e = hospital.pesquisarEnfermaria(id);
+        if (e == null) {
+            System.out.println ("Enfermaria não encontrada.");
+            return;
+        }
 
         System.out.print("Data de Início (dd/MM/yyyy): ");
         String dataInicioLida = teclado.nextLine();
+        while (!Validador.isData(dataInicioLida)) {
+            System.out.print("Erro: Formato inválido. Reintroduza a data de início (dd/MM/yyyy): ");
+            dataInicioLida = teclado.nextLine();
+        }
         LocalDate inicio = LocalDate.parse(dataInicioLida, formato);
 
         System.out.print("Data de Fim (dd/MM/yyyy): ");
         String dataFimLida = teclado.nextLine();
+        while (!Validador.isData(dataFimLida)) {
+            System.out.print("Erro: Formato inválido. Reintroduza a data de fim (dd/MM/yyyy): ");
+            dataFimLida = teclado.nextLine();
+        }
         LocalDate fim = LocalDate.parse(dataFimLida, formato);
 
+        if (fim.isBefore(inicio)) {
+            System.out.println("Erro: A data de fim não pode ser anterior à data de início.");
+            return;
+        }
         double perc = hospital.calcularPercentagemPressao(id, inicio, fim);
         System.out.println("\nRESULTADO: Pressão em " + String.format("%.2f", perc) + "% do tempo.");
     }
@@ -212,13 +235,57 @@ public class Menu {
                 }
             } else {
                 System.out.println("Erro: Insira um número.");
-                teclado.next(); // Limpar entrada inválida
+                teclado.nextLine(); // Limpar entrada inválida
             }
         } while (opcao != 0);
     }
 
     private void inserirEpisodio() {
+        System.out.println("\n--- INSERIR NOVO EPISÓDIO ---");
 
+        System.out.print("Introduza o Código da Enfermaria: ");
+        String idEnf = teclado.nextLine();
+        Enfermaria alvo = hospital.pesquisarEnfermaria(idEnf);
+
+        if (alvo == null) {
+            System.out.println("Erro: A enfermaria " + idEnf + " não existe no sistema. Registo cancelado.");
+            return; // Sai do método e volta ao menu
+        }
+
+        System.out.print("Introduza o número da Cama: ");
+        String camaTxt = teclado.nextLine();
+        while (!Validador.isInteiro(camaTxt)) {
+            System.out.print("Erro! Tem de inserir um número inteiro válido. Tente novamente: ");
+            camaTxt = teclado.nextLine();
+        }
+        int idCama = Integer.parseInt(camaTxt);
+
+        System.out.print("Introduza a Data de Admissão (dd/MM/yyyy): ");
+        String dataAdmTxt = teclado.nextLine();
+        while (!Validador.isData(dataAdmTxt)) {
+            System.out.print("Erro! Formato inválido. Use dd/MM/yyyy: ");
+            dataAdmTxt = teclado.nextLine();
+        }
+        LocalDate dataAdmissao = LocalDate.parse(dataAdmTxt, Validador.FORMATO);
+
+        System.out.print("Introduza a Data de Alta (Deixe em branco se ainda internado): ");
+        String dataAltaTxt = teclado.nextLine();
+        LocalDate dataAlta = null;
+
+        if (!dataAltaTxt.trim().isEmpty()) {
+            while (!Validador.isData(dataAltaTxt)) {
+                System.out.print("Erro! Formato inválido. Use dd/MM/yyyy ou deixe em branco: ");
+                dataAltaTxt = teclado.nextLine();
+            }
+            dataAlta = LocalDate.parse(dataAltaTxt, Validador.FORMATO);
+        }
+
+        try {
+            alvo.getEpisodios().add(new Episodio(idCama, dataAdmissao, dataAlta));
+            System.out.println("Sucesso! Episódio registado na enfermaria " + idEnf + ".");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro na inserção: " + e.getMessage());
+        }
     }
 
     private void inserirEnfermaria() {
