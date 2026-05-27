@@ -25,6 +25,7 @@ public class Menu {
     /**
      * Construtor da classe Menu.
      * Inicializa o scanner de leitura e associa o hospital de onde os dados serão lidos.
+     *
      * @param hospital O objeto Hospital que contém a lista de enfermarias e episódios
      */
     public Menu(Hospital hospital) {
@@ -53,7 +54,7 @@ public class Menu {
             System.out.println("3. Listar Episódios de uma Enfermaria (Ordenados para data de Admissão)");
             System.out.println("4. Consultar Ocupação em Data Específica");
             System.out.println("5. Calcular Percentagem de Pressão (Período)");
-            System.out.println ("6. Inserir um novo registo");
+            System.out.println("6. Inserir um novo registo");
             System.out.println("7. Alterar a capacidade das camas");
             System.out.println("8. Calcular a percentagem de pressão global das enfermarias");
             System.out.println("9. Visualizar Gráfico de Barras (Ocupação");
@@ -65,7 +66,7 @@ public class Menu {
                 opcao = teclado.nextInt();
                 teclado.nextLine(); // Limpar o buffer do teclado
 
-                switch (opcao){
+                switch (opcao) {
                     case 1:
                         menuListarEnfermarias();
                     case 2:
@@ -85,7 +86,7 @@ public class Menu {
                     case 9:
                         menuGraficoBarras();
                     case 0:
-                        System.out.println ("A encerrar o sistema... Até à próxima!");
+                        System.out.println("A encerrar o sistema... Até à próxima!");
                     default:
                         System.out.println("Opção inválida! Tente um número entre 0 e 8.");
                 }
@@ -199,7 +200,7 @@ public class Menu {
             if (teclado.hasNextInt()) {
                 opcao = teclado.nextInt();
                 teclado.nextLine();
-                switch (opcao){
+                switch (opcao) {
                     case 1:
                         inserirEpisodio();
                     case 2:
@@ -220,11 +221,11 @@ public class Menu {
 
     }
 
-    private void inserirEnfermaria (){
+    private void inserirEnfermaria() {
 
     }
 
-    private void alterarCamas(){
+    private void alterarCamas() {
         System.out.print("Insira a percentagem de alteração (ex: 10 para aumentar, -5 para diminuir): ");
         double percentagem = teclado.nextDouble();
 
@@ -266,12 +267,53 @@ public class Menu {
         System.out.println("\nOrientação:");
         System.out.println("1. Horizontal");
         System.out.println("2. Vertical");
+        System.out.println("0. Voltar ao menu principal");
         System.out.print("Escolha: ");
 
-        int orientacao = 1;
+        int orientacao = -1;
         if (teclado.hasNextInt()) {
             orientacao = teclado.nextInt();
         }
         teclado.nextLine();
+
+        try {
+            LocalDate inicio = LocalDate.parse(dataInicio, formato);
+            LocalDate fim = LocalDate.parse(dataFim, formato);
+
+            if (fim.isBefore(inicio)) {
+                System.out.println("Erro: A data de fim não pode ser anterior à data de início.");
+                return;
+            }
+
+            Enfermaria enfermariaEscolhida = null;
+            for (Enfermaria e : hospital.getEnfermarias()) {
+                if (e.getCodigo().equalsIgnoreCase(cod)) {
+                    enfermariaEscolhida = e;
+                }
+            }
+
+            if (enfermariaEscolhida == null) {
+                System.out.println("Enfermaria não encontrada.");
+                return;
+            }
+
+            switch (orientacao) {
+                case 1:
+                    mostrarGraficoHorizontal(enfermariaEscolhida, inicio, fim, simbolo);
+                case 2:
+                    mostrarGraficoVertical(enfermariaEscolhida, inicio, fim, simbolo);
+                case 0:
+                    exibir();
+                default:
+                    System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
+        }
+    }
+
+    private void mostrarGraficoHorizontal (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
+
     }
 }
