@@ -134,7 +134,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, IndicadoresO
         s.append ("\nCapacidade: ").append(capacidadeCamas).append("camas");
         double taxaHoje = calcularTaxaOcupacao(LocalDate.now());
         s.append ("\nTaxa de Ocupação: ").append(String.format("%.2f", taxaHoje)).append("%");
-        s.append("\nGráfico Ocupação: [").append(obterBarraASCII(taxaHoje)).append("]");
+        s.append("\nGráfico Ocupação: [").append(obterBarraASCII(taxaHoje, '#')).append("]");
         return s.toString();
     }
 
