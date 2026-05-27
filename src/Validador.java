@@ -6,7 +6,7 @@ public class Validador {
     public static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static boolean isInteiro (String texto) {
-        if (texto!= null || texto.trim().isEmpty()) return false;
+        if (texto == null || texto.trim().isEmpty()) return false;
         try {
             Integer.parseInt (texto.trim());
             return true;

@@ -45,47 +45,6 @@ public class Hospital {
         this.enfermarias = enfermarias;
     }
 
-    public void carregarEpisodios(String enfs, PrintWriter log) throws FileNotFoundException {
-        Scanner leitor = new Scanner(new File(enfs));
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        if (leitor.hasNextLine()) leitor.nextLine();
-
-        while (leitor.hasNextLine()) {
-            String linha = leitor.nextLine();
-            if (!linha.trim().isEmpty()) {
-                String[] dados = linha.split(";", -1);
-
-                if (dados.length >= 4) {
-                    String idEnf = dados[0].trim();
-                    int idCama = Integer.parseInt(dados[1].trim());
-                    LocalDate dataAdm = LocalDate.parse(dados[2].trim(), formato);
-
-                    LocalDate dataAlta = (dados[3].trim().isEmpty()) ? null : LocalDate.parse(dados[3].trim(), formato);
-
-                    if (dataAlta != null && dataAlta.isBefore(dataAdm)) {
-                        String erro = "LOG ERRO: Data de alta inválida no ID " + idEnf + " (Cama " + idCama + ")";
-                        System.out.println(erro);
-                        log.println(LocalDate.now() + " | " + erro);
-                    } else {
-                        Enfermaria alvo = null;
-                        for (Enfermaria e : enfermarias) {
-                            if (e.getCodigo().equals(idEnf)) { alvo = e; }
-                        }
-
-                        if (alvo != null) {
-                            alvo.getEpisodios().add(new Episodio(idCama, dataAdm, dataAlta));
-                        } else {
-                            String erro = "LOG ERRO: Enfermaria " + idEnf + " não encontrada para o episódio.";
-                            System.out.println(erro);
-                            log.println(LocalDate.now() + " | " + erro);
-                        }
-                    }
-                }
-            }
-        }
-        leitor.close();
-    }
 
     /**
      * Ordena a lista global de enfermarias com base no critério de ocupação
