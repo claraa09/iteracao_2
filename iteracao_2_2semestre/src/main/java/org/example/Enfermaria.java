@@ -256,4 +256,71 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
         }
         return Math.sqrt(somaQuadrados/n);
     }
+
+    /**
+     * Calcula o score de ocupação (1-5) para uma data de referência.
+     * @param data Data de referência
+     * @return Score entre 1 e 5
+     */
+    public int calcularScoreOcupacao(LocalDate data){
+
+        double taxa = calcularTaxaOcupacao(data);
+
+        if (taxa <= LIMIAR_DE_PRESSAO) {
+            return 1;
+        } else if (taxa <= 90){
+            return 2;
+        }else if (taxa <95){
+            return 3;
+        } else if (taxa <= 100) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
+    /**
+     * Calcula o score de turnover (1-5) para uma data de referência.
+     * percTurnover = (admissões + altas) / camasTotais × 100
+     * @param data Data de referência
+     * @return Score entre 1 e 5
+     */
+    public int calcularScoreTurnover(LocalDate data) {
+        int admissoes = 0;
+        int altas = 0;
+
+        for (Episodio ep : episodios) {
+            if (ep.getDataAdmissao().isEqual(data)) {
+                admissoes++;
+            }
+            if (ep.isAlta() && ep.getDataAlta().isEqual(data)) {
+                altas++;
+            }
+        }
+
+        double turnover = (double)(admissoes + altas) / getCapacidadeCamas() * 100;
+
+        if (turnover <= 10) {
+            return 1;
+        } else if (turnover <= 20) {
+            return 2;
+        } else if (turnover <= 30) {
+            return 3;
+        } else if (turnover <= 40) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
+    /**
+     * Calcula o Índice de Pressão (1-5) com 1 casa decimal.
+     * Índice = 0.7 × scoreOcupação + 0.3 × scoreTurnover
+     * @param data Data de referência
+     * @return Índice de pressão
+     */
+    public double calcularIndicePressao(LocalDate data) {
+        double indice = 0.7 * calcularScoreOcupacao(data) + 0.3 * calcularScoreTurnover(data);
+        return Math.round(indice * 10.0) / 10.0;// Arredonda o índice para 1 casa decimal
+        }
 }
