@@ -19,7 +19,7 @@ public class Validador {
     }
 
     public static boolean isDecimal (String texto) {
-        if (texto!= null || texto.trim().isEmpty()) return false;
+        if (texto== null || texto.trim().isEmpty()) return false;
         try {
             Double.parseDouble(texto.trim());
             return true;
@@ -29,7 +29,7 @@ public class Validador {
     }
 
     public static boolean isData (String texto) {
-        if (texto!= null || texto.trim().isEmpty()) return false;
+        if (texto== null || texto.trim().isEmpty()) return false;
         try {
             LocalDate.parse(texto.trim(), FORMATO);
             return true;

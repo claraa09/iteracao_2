@@ -30,7 +30,7 @@ public class EnfermariaCI extends Enfermaria {
      * @param pressaoAtmRef Pressão atmosférica de referência.
      */
     public EnfermariaCI (String codigo, int capacidadeCamas, String horarioVisitas, double pressaoAtm, double pressaoAtmRef){
-        super (codigo, capacidadeCamas);//Chama o construtor da classe base (Enfermaria)
+        super (codigo, capacidadeCamas);
         this.horarioVisitas=horarioVisitas;
         this.pressaoAtm=pressaoAtm;
         this.pressaoAtmRef=pressaoAtmRef;

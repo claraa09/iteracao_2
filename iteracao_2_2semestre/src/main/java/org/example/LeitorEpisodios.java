@@ -37,21 +37,25 @@ public class LeitorEpisodios {
                     String dataAdmTxt = dados[2].trim();
                     String dataAltaTxt = dados[3].trim();
 
-                    // 1. VALIDAÇÕES: Usar a nossa nova classe
                     if (!Validador.isInteiro(idCamaTxt)) {
-                        System.err.println("Erro na linha " + numLinha + ": ID da Cama não é um número.");
+                        String erro = "LOG ERRO (Linha " + numLinha + "): ID da Cama não é um número.";
+                        System.out.println(erro);
+                        if (log != null) log.println(LocalDate.now() + " | " + erro);
                         continue;
                     }
                     if (!Validador.isData(dataAdmTxt)) {
-                        System.err.println("Erro na linha " + numLinha + ": Data de Admissão inválida.");
+                        String erro = "LOG ERRO (Linha " + numLinha + "): Data de Admissão inválida.";
+                        System.out.println(erro);
+                        if (log != null) log.println(LocalDate.now() + " | " + erro);
                         continue;
                     }
                     if (!dataAltaTxt.isEmpty() && !Validador.isData(dataAltaTxt)) {
-                        System.err.println("Erro na linha " + numLinha + ": Data de Alta inválida.");
+                        String erro = "LOG ERRO (Linha " + numLinha + "): Data de Alta inválida.";
+                        System.out.println(erro);
+                        if (log != null) log.println(LocalDate.now() + " | " + erro);
                         continue;
                     }
 
-                    // 2. CONVERSÃO SEGURA (Nenhum try-catch de formatação é necessário aqui agora!)
                     int idCama = Integer.parseInt(idCamaTxt);
                     LocalDate dataAd = LocalDate.parse(dataAdmTxt, Validador.FORMATO);
 
@@ -60,7 +64,6 @@ public class LeitorEpisodios {
                         dataAlta = LocalDate.parse(dataAltaTxt, Validador.FORMATO);
                     }
 
-                    // 3. Lógica normal de procurar no hospital e adicionar
                     Enfermaria alvo = hospital.pesquisarEnfermaria(codigo);
                     if (alvo != null) {
                         try {

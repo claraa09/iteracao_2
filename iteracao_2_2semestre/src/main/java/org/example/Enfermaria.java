@@ -258,7 +258,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     }
 
     /**
-     * Calcula o score de ocupação (1-5) para uma data de referência.
+     * Calcula o score de ocupação (1-5) para uma da    ta de referência.
      * @param data Data de referência
      * @return Score entre 1 e 5
      */

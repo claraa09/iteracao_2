@@ -382,8 +382,6 @@ public class Menu {
             double pRef = Double.parseDouble(pRefTxt);
 
             novaEnfermaria = new EnfermariaCI(codigo, capacidade, horario, pAtm, pRef);
-            // Pequeno ajuste para mapear o construtor correto da UCI
-            novaEnfermaria = new EnfermariaCI(codigo, capacidade, horario, pAtm, pRef);
         }
 
         if (novaEnfermaria != null) {
@@ -423,11 +421,32 @@ public class Menu {
         System.out.print("Introduza o código da enfermaria: ");
         String cod = teclado.nextLine();
 
+        Enfermaria enfermariaEscolhida = hospital.pesquisarEnfermaria(cod);
+        if (enfermariaEscolhida == null) {
+            System.out.println("Erro: Enfermaria não encontrada.");
+            return;
+        }
+
         System.out.print("Data de Início (dd/MM/yyyy): ");
-        String dataInicio = teclado.nextLine();
+        String dataInicio = teclado.nextLine().trim();
+        while (!Validador.isData(dataInicio)) {
+            System.out.print("Erro! Formato incorreto. Reintroduza a Data de Início (dd/MM/yyyy): ");
+            dataInicio = teclado.nextLine().trim();
+        }
+        LocalDate inicio = LocalDate.parse(dataInicio, Validador.FORMATO);
 
         System.out.print("Data de Fim (dd/MM/yyyy): ");
         String dataFim = teclado.nextLine();
+        while (!Validador.isData(dataFim)) {
+            System.out.print("Erro! Formato incorreto. Reintroduza a Data de Fim (dd/MM/yyyy): ");
+            dataFim = teclado.nextLine().trim();
+        }
+        LocalDate fim = LocalDate.parse(dataFim, Validador.FORMATO);
+
+        if (fim.isBefore(inicio)) {
+            System.out.println("Erro: A data de fim não pode ser anterior à data de início.");
+            return;
+        }
 
         char simbolo = '#';
 
@@ -443,42 +462,22 @@ public class Menu {
         }
         teclado.nextLine();
 
-        try {
-            LocalDate inicio = LocalDate.parse(dataInicio, formato);
-            LocalDate fim = LocalDate.parse(dataFim, formato);
-
-            if (fim.isBefore(inicio)) {
-                System.out.println("Erro: A data de fim não pode ser anterior à data de início.");
-                return;
-            }
-
-            Enfermaria enfermariaEscolhida = null;
-            for (Enfermaria e : hospital.getEnfermarias()) {
-                if (e.getCodigo().equalsIgnoreCase(cod)) {
-                    enfermariaEscolhida = e;
-                }
-            }
-
-            if (enfermariaEscolhida == null) {
-                System.out.println("Enfermaria não encontrada.");
-                return;
-            }
-
-            switch (orientacao) {
-                case 1:
-                    mostrarGraficoHorizontal(enfermariaEscolhida, inicio, fim, simbolo);
-                case 2:
-                    mostrarGraficoVertical(enfermariaEscolhida, inicio, fim, simbolo);
-                case 0:
-                    exibir();
-                default:
-                    System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
+        switch (orientacao) {
+            case 1:
+                mostrarGraficoHorizontal(enfermariaEscolhida, inicio, fim, simbolo);
+                break;
+            case 2:
+                mostrarGraficoVertical(enfermariaEscolhida, inicio, fim, simbolo);
+                break;
+            case 0:
+                exibir();
+            default:
+                System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");
+                break;
         }
+
     }
+
 
     private void mostrarGraficoHorizontal (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
         System.out.println("\n--- GRÁFICO DE BARRAS HORIZONTAL (" + enfermaria.getCodigo() + ") ---");
@@ -528,7 +527,7 @@ public class Menu {
                 if (barrasVerticais >= nivel) {
                     System.out.print("  " + simbolo + "   ");
                 } else {
-                    System.out.print("      "); 
+                    System.out.print("      ");
                 }
             }
             System.out.println();

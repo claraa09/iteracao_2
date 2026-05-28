@@ -26,7 +26,7 @@ public class EnfermariaPsiquiatrica extends Enfermaria {
      * @param nivelSeguranca Inteiro que define o nível de segurança da enfermaria.
      */
     public EnfermariaPsiquiatrica (String codigo, int capacidadeCamas, String horarioVisitas, int nivelSeguranca){
-        super (codigo, capacidadeCamas);//Chama o construtor da classe base (Enfermaria)
+        super (codigo, capacidadeCamas);
         this.horarioVisitas=horarioVisitas;
         this.nivelSeguranca=nivelSeguranca;
     }
