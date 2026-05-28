@@ -478,4 +478,8 @@ public class Menu {
     private void mostrarGraficoHorizontal (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
 
     }
+
+    private void mostrarGraficoVertical (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
+
+    }
 }
