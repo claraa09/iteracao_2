@@ -100,9 +100,11 @@ public class Menu {
                         break;
                     case 0:
                         System.out.println("A encerrar o sistema... Até à próxima!");
+                        GestorDados.guardarEstado(hospital);
+                        System.out.println("A encerrar o sistema... Até à próxima!");
                         break;
                     default:
-                        System.out.println("Opção inválida! Tente um número entre 0 e 8.");
+                        System.out.println("Opção inválida! Tente um número entre 0 e 9.");
                 }
             } else {
                 System.out.println("Erro: Por favor, insira apenas números.");
