@@ -481,10 +481,69 @@ public class Menu {
     }
 
     private void mostrarGraficoHorizontal (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
+        System.out.println("\n--- GRÁFICO DE BARRAS HORIZONTAL (" + enfermaria.getCodigo() + ") ---");
+        LocalDate dataAtual = inicio;
 
+        while (!dataAtual.isAfter(fim)) {
+
+            double perc = enfermaria.calcularTaxaOcupacao(dataAtual);
+            int numBarras = (int) Math.round((perc * 50) / 100.0);
+
+            StringBuilder barra = new StringBuilder();
+            for (int i = 0; i < numBarras; i++) {
+                barra.append(simbolo);
+            }
+
+            System.out.printf("%s %s [%s]\n",
+                    enfermaria.getCodigo(),
+                    dataAtual.format(formato),
+                    barra.toString());
+
+            dataAtual = dataAtual.plusDays(1);
+        }
     }
 
     private void mostrarGraficoVertical (Enfermaria enfermaria, LocalDate inicio, LocalDate fim,char simbolo){
+        System.out.println("\n--- GRÁFICO DE BARRAS VERTICAL (" + enfermaria.getCodigo() + ") ---");
 
+        java.util.List<Double> percentagens = new java.util.ArrayList<>();
+        java.util.List<String> datas = new java.util.ArrayList<>();
+
+        LocalDate dataAtual = inicio;
+        while (!dataAtual.isAfter(fim)) {
+            percentagens.add(enfermaria.calcularTaxaOcupacao(dataAtual));
+            datas.add(dataAtual.format(DateTimeFormatter.ofPattern("dd/MM")));
+            dataAtual = dataAtual.plusDays(1);
+        }
+
+        int linhasAltura = 10;
+
+        for (int nivel = linhasAltura; nivel > 0; nivel--) {
+            System.out.printf("%3d%% | ", nivel * 10);
+
+            for (Double perc : percentagens) {
+
+                int barrasVerticais = (int) Math.round(perc / 10.0);
+
+                if (barrasVerticais >= nivel) {
+                    System.out.print("  " + simbolo + "   ");
+                } else {
+                    System.out.print("      "); 
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.print("      ");
+        for (int i = 0; i < percentagens.size(); i++) {
+            System.out.print("------");
+        }
+        System.out.println();
+
+        System.out.print("       ");
+        for (String d : datas) {
+            System.out.print(d + "  ");
+        }
+        System.out.println();
     }
 }
