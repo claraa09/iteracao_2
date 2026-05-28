@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -69,24 +70,34 @@ public class Menu {
                 switch (opcao) {
                     case 1:
                         menuListarEnfermarias();
+                        break;
                     case 2:
                         menuEstatisticasLoS();
+                        break;
                     case 3:
                         menuListarEpisodios();
+                        break;
                     case 4:
                         menuOcupacaoData();
+                        break;
                     case 5:
                         menuAnalisePressao();
+                        break;
                     case 6:
                         escolherRegisto();
+                        break;
                     case 7:
                         alterarCamas();
+                        break;
                     case 8:
                         calcularPercentagemPressaoGlobal();
+                        break;
                     case 9:
                         menuGraficoBarras();
+                        break;
                     case 0:
                         System.out.println("A encerrar o sistema... Até à próxima!");
+                        break;
                     default:
                         System.out.println("Opção inválida! Tente um número entre 0 e 8.");
                 }
@@ -289,7 +300,91 @@ public class Menu {
     }
 
     private void inserirEnfermaria() {
+        System.out.println("\n--- INSERIR NOVA ENFERMARIA ---");
 
+        System.out.print("Introduza o Código da nova Enfermaria (ex: E06): ");
+        String codigo = teclado.nextLine().trim();
+
+        if (hospital.pesquisarEnfermaria(codigo) != null) {
+            System.out.println("Erro: Já existe uma enfermaria com o código " + codigo + ".");
+            return;
+        }
+
+        System.out.print("Tipo de Enfermaria (GERAL / PSIQ / UCI): ");
+        String tipo = teclado.nextLine().trim().toUpperCase();
+        if (!tipo.equals("GERAL") && !tipo.equals("PSIQ") && !tipo.equals("UCI")) {
+            System.out.println("Erro: Tipo de enfermaria inválido.");
+            return;
+        }
+
+        System.out.print("Capacidade total de camas: ");
+        String capTxt = teclado.nextLine();
+        while (!Validador.isInteiro(capTxt)) {
+            System.out.print("Erro! Insira um número inteiro para a capacidade: ");
+            capTxt = teclado.nextLine();
+        }
+        int capacidade = Integer.parseInt(capTxt);
+
+        Enfermaria novaEnfermaria = null;
+
+        if (tipo.equals("GERAL")) {
+            System.out.print("Número máximo de acompanhantes: ");
+            String acompTxt = teclado.nextLine();
+            while (!Validador.isInteiro(acompTxt)) {
+                System.out.print("Erro! Insira um número inteiro: ");
+                acompTxt = teclado.nextLine();
+            }
+            int acompanhantes = Integer.parseInt(acompTxt);
+
+            System.out.print("Insira os recursos (separados por vírgulas, ex: Oxigénio, Monitor): ");
+            String recursosInput = teclado.nextLine();
+            List<String> recursos = Arrays.asList(recursosInput.split(",\\s*"));
+
+            novaEnfermaria = new EnfermariaGeral(codigo, capacidade, acompanhantes, recursos);
+
+        } else if (tipo.equals("PSIQ")) {
+            System.out.print("Horário de visitas (ex: 14:00 - 16:00): ");
+            String horario = teclado.nextLine().trim();
+
+            System.out.print("Nível de segurança (1-Baixo, 2-Médio, 3-Alto): ");
+            String nivelTxt = teclado.nextLine();
+            while (!Validador.isInteiro(nivelTxt)) {
+                System.out.print("Erro! Escolha um número inteiro (1, 2 ou 3): ");
+                nivelTxt = teclado.nextLine();
+            }
+            int nivel = Integer.parseInt(nivelTxt);
+
+            novaEnfermaria = new EnfermariaPsiquiatrica(codigo, capacidade, horario, nivel);
+
+        } else if (tipo.equals("UCI")) {
+            System.out.print("Horário de visitas: ");
+            String horario = teclado.nextLine().trim();
+
+            System.out.print("Pressão Atmosférica Atual: ");
+            String pAtmTxt = teclado.nextLine();
+            while (!Validador.isDecimal(pAtmTxt)) {
+                System.out.print("Erro! Insira um valor decimal (ex: 1.0): ");
+                pAtmTxt = teclado.nextLine();
+            }
+            double pAtm = Double.parseDouble(pAtmTxt);
+
+            System.out.print("Pressão Atmosférica de Referência: ");
+            String pRefTxt = teclado.nextLine();
+            while (!Validador.isDecimal(pRefTxt)) {
+                System.out.print("Erro! Insira um valor decimal: ");
+                pRefTxt = teclado.nextLine();
+            }
+            double pRef = Double.parseDouble(pRefTxt);
+
+            novaEnfermaria = new EnfermariaCI(codigo, capacidade, horario, pAtm, pRef);
+            // Pequeno ajuste para mapear o construtor correto da UCI
+            novaEnfermaria = new EnfermariaCI(codigo, capacidade, horario, pAtm, pRef);
+        }
+
+        if (novaEnfermaria != null) {
+            hospital.getEnfermarias().add(novaEnfermaria);
+            System.out.println("Sucesso: Enfermaria " + codigo + " (" + tipo + ") adicionada ao hospital!");
+        }
     }
 
     private void alterarCamas() {
