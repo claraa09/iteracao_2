@@ -61,7 +61,8 @@ public class Menu {
             System.out.println("6. Inserir um novo registo");
             System.out.println("7. Alterar a capacidade das camas");
             System.out.println("8. Calcular a percentagem de pressão global das enfermarias");
-            System.out.println("9. Visualizar Gráfico de Barras (Ocupação");
+            System.out.println("9. Calcular Índice de Pressão (ordenado por ordem decrescente)");
+            System.out.println("10. Visualizar Gráfico de Barras (Ocupação)");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -96,6 +97,9 @@ public class Menu {
                         calcularPercentagemPressaoGlobal();
                         break;
                     case 9:
+                        menuIndicePressao();
+                        break;
+                    case 10:
                         menuGraficoBarras();
                         break;
                     case 0:
@@ -413,6 +417,45 @@ public class Menu {
             System.out.println("\n--- ANÁLISE DE PRESSÃO GLOBAL ---");
             System.out.printf("Em %s, %.2f%% das enfermarias do hospital estavam em esforço crítico (>85%%).%n",
                     data.format(formato), percentagem);
+
+        } catch (Exception e) {
+            System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
+        }
+    }
+
+    /**
+     * Solicita uma data de referência e apresenta o ranking de enfermarias
+     * pelo Índice de Pressão em ordem decrescente.
+     */
+    private void menuIndicePressao(){
+        System.out.println("Introduza a data de referência (dd/MM/yyyy): ");
+        String dataLida = teclado.nextLine();
+
+        try {
+            LocalDate data = LocalDate.parse(dataLida, formato);
+
+            Hospital.ordenarEnfermariasPorIndice(hospital.getEnfermarias(), data);
+
+            System.out.println("\n--- RANKING DE ÍNDICE DE PRESSÃO EM " + data.format(formato) + " ---");
+            System.out.printf("%-4s | %-6s | %-8s | %s%n", "Pos.", "Enf.", "Índice", "Interpretação");
+            System.out.println("-".repeat(45));
+
+            int posicao = 1;
+            for (Enfermaria e : hospital.getEnfermarias()){
+                double indice = e.calcularIndicePressao(data);
+
+                String interpretacao;
+                if (indice <= 2.0){
+                    interpretacao="Pressão Baixa";
+                } else if (indice <= 3.5) {
+                    interpretacao = "Pressão Moderada";
+                } else {
+                    interpretacao = "Pressão Alta";
+                }
+
+                System.out.printf("%-4d | %-6s | %-8.1f | %s%n", posicao, e.getCodigo(), indice, interpretacao);
+                posicao++;
+            }
 
         } catch (Exception e) {
             System.out.println("Erro: Formato de data inválido. Use o padrão dd/MM/yyyy.");
