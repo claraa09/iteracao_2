@@ -28,23 +28,22 @@ public class Main {
     private static final String FILE_LOG = "hospital_sistema.log";
 
     public static void main(String[] args) throws Exception {
-        // Inicialização do Hospital
-        Hospital meuHospital = new Hospital("Hospital Central");
+        System.out.println(">>> [SISTEMA] A iniciar o programa...");
 
-        // Abre o PrintWritter com FileWriter(FILE_LOG, true) para não apagar o histórico anterior
-        PrintWriter logWriter = new PrintWriter(new FileWriter(FILE_LOG, true));
+        Hospital meuHospital = GestorDados.carregarEstado();
 
-        // Utilização das constantes para o carregamento automático
-        System.out.println(">>> [SISTEMA] A carregar ficheiros...");
-        meuHospital.setEnfermarias(LeitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter));
-        LeitorEpisodios.lerEpisodios(FICHEIRO_EPISODIOS, meuHospital, logWriter);
-        logWriter.close();
+        if (meuHospital == null) {
+            System.out.println(">>> [SISTEMA] Sessão não encontrada. A importar dados dos ficheiros CSV...");
+            meuHospital = new Hospital("Hospital Central");
 
+            PrintWriter logWriter = new PrintWriter(new FileWriter(FILE_LOG, true));
+            meuHospital.setEnfermarias(LeitorEnfermarias.lerEnfermarias(FICHEIRO_ENFERMARIAS, logWriter));
+            LeitorEpisodios.lerEpisodios(FICHEIRO_EPISODIOS, meuHospital, logWriter);
+            logWriter.close();
 
-        // O aviso de sucesso antes de entrar no menu
-        System.out.println(">>> [SISTEMA] Ficheiros carregados com sucesso!");
+            System.out.println(">>> [SISTEMA] Ficheiros CSV importados com sucesso!");
+        }
 
-        // Transição direta para o Menu interativo
         Menu menuPrincipal = new Menu(meuHospital);
         menuPrincipal.exibir();
     }
