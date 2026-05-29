@@ -2,6 +2,8 @@ package org.example;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Hospital implements java.io.Serializable{
@@ -134,5 +136,22 @@ public class Hospital implements java.io.Serializable{
         }
 
         return null; // Se percorreu tudo e não encontrou, devolve null
+    }
+
+    public static void ordenarEnfermariasPorIndice(List<Enfermaria> enfermarias, LocalDate data){
+        Collections.sort(enfermarias, Collections.reverseOrder(new Comparator<Enfermaria>() {
+            @Override
+            public int compare(Enfermaria e1, Enfermaria e2) {
+                double indice1 = e1.calcularIndicePressao(data);
+                double indice2 = e1.calcularIndicePressao(data);
+                if (indice1 == indice2){
+                    return 0;
+                } else if (indice1<indice2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        }));
     }
 }
