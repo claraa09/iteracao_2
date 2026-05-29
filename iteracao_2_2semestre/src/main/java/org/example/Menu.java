@@ -154,14 +154,14 @@ public class Menu {
      */
     private void menuListarEpisodios() {
         System.out.print("Introduza o código da enfermaria: ");
-        String cod = teclado.nextLine();
+        String codigo = teclado.nextLine().trim();
 
         boolean encontrada = false;
         for (Enfermaria e : hospital.getEnfermarias()) {
-            if (e.getCodigo().equalsIgnoreCase(cod)) {
+            if (e.getCodigo().equalsIgnoreCase(codigo)) {
                 encontrada = true;
                 e.ordenarEpisodios(); // Ordena por data de admissão
-                System.out.println("\nEPISÓDIOS DA ENFERMARIA " + cod + ":");
+                System.out.println("\nEPISÓDIOS DA ENFERMARIA " + codigo + ":");
                 for (Episodio ep : e.getEpisodios()) {
                     String alta = ep.isAlta() ? ep.getDataAlta().format(formato) : "Ainda Internado";
                     System.out.println("   Cama " + ep.getIdCama() + " | Início: " +
@@ -304,11 +304,15 @@ public class Menu {
         }
 
         try {
-            alvo.getEpisodios().add(new Episodio(idCama, dataAdmissao, dataAlta));
+            // CORREÇÃO AQUI: Em vez de usar os gets, usamos o método direto
+            Episodio novoEp = new Episodio(idCama, dataAdmissao, dataAlta);
+            alvo.adicionarEpisodio(novoEp);
+
             System.out.println("Sucesso! Episódio registado na enfermaria " + idEnf + ".");
         } catch (IllegalArgumentException e) {
             System.out.println("Erro na inserção: " + e.getMessage());
         }
+
     }
 
     private void inserirEnfermaria() {
@@ -401,7 +405,7 @@ public class Menu {
         }
 
         if (novaEnfermaria != null) {
-            hospital.getEnfermarias().add(novaEnfermaria);
+            hospital.adicionarEnfermaria(novaEnfermaria);
             System.out.println("Sucesso: Enfermaria " + codigo + " (" + tipo + ") adicionada ao hospital!");
         }
     }
@@ -528,7 +532,7 @@ public class Menu {
                 System.out.println("\nA guardar o estado atual do sistema...");
                 GestorDados.guardarEstado(hospital); // <--- GRAVA AQUI
                 System.out.println("A encerrar o sistema... Até à próxima!");
-                break;
+                return;
             default:
                 System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");
                 break;

@@ -155,4 +155,9 @@ public class Hospital implements java.io.Serializable{
             }
         }));
     }
+    public void adicionarEnfermaria(Enfermaria novaEnf) {
+        if (novaEnf != null) {
+            this.enfermarias.add(novaEnf); // Adiciona diretamente à lista real e definitiva
+        }
+    }
 }

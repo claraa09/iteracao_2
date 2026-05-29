@@ -323,5 +323,11 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     public double calcularIndicePressao(LocalDate data) {
         double indice = 0.7 * calcularScoreOcupacao(data) + 0.3 * calcularScoreTurnover(data);
         return Math.round(indice * 10.0) / 10.0;// Arredonda o índice para 1 casa decimal
+    }
+
+    public void adicionarEpisodio(Episodio novoEp) {
+        if (novoEp != null) {
+            this.episodios.add(novoEp); // Adiciona diretamente à lista real e definitiva
         }
+    }
 }
