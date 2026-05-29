@@ -144,7 +144,7 @@ public class Hospital implements java.io.Serializable{
             @Override
             public int compare(Enfermaria e1, Enfermaria e2) {
                 double indice1 = e1.calcularIndicePressao(data);
-                double indice2 = e1.calcularIndicePressao(data);
+                double indice2 = e2.calcularIndicePressao(data);
                 if (indice1 == indice2){
                     return 0;
                 } else if (indice1<indice2) {
