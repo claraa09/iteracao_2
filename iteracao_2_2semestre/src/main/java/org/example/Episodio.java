@@ -33,7 +33,7 @@ public class Episodio implements Comparable<Episodio>, Serializable {
      */
     public Episodio(int idCama, LocalDate dataAdmissao, LocalDate dataAlta) {
 
-        if (dataAlta != null && dataAlta.isAfter(dataAdmissao)){
+        if (dataAlta != null && dataAlta.isBefore(dataAdmissao)){
             throw new IllegalArgumentException("Erro: Data de alta anterior à admissão (Cama " + idCama + ").");
         }
         this.idCama = idCama;
