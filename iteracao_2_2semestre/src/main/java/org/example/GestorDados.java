@@ -21,12 +21,14 @@ public class GestorDados {
      * Deserializa (Lê) o estado do Hospital do disco.
      */
     public static Hospital carregarEstado() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_BINARIO))) {
-            Hospital hospital = (Hospital) ois.readObject();
-            System.out.println(">>> [SISTEMA] Sessão anterior restaurada com sucesso.");
-            return hospital;
+        File f = new File(FICHEIRO_BINARIO);
+        if (!f.exists()) {
+            return null;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
+            return (Hospital) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            return null; // Devolve null se o ficheiro não existir (ex: primeira vez a correr)
+            return null;
         }
     }
 }

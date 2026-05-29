@@ -42,9 +42,13 @@ public class Main {
             logWriter.close();
 
             System.out.println(">>> [SISTEMA] Ficheiros CSV importados com sucesso!");
+
+        } else {
+            System.out.println(">>> [SISTEMA] Dados da sessão anterior restaurados com sucesso!");
         }
 
         Menu menuPrincipal = new Menu(meuHospital);
         menuPrincipal.exibir();
+
     }
 }

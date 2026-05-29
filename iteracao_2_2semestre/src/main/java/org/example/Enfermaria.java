@@ -12,6 +12,7 @@ import java.util.List;
  * @author Clara Soares (202504216)
  */
 public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Código identificador único da enfermaria.
      */

@@ -246,12 +246,15 @@ public class Menu {
                 switch (opcao) {
                     case 1:
                         inserirEpisodio();
+                        break;
                     case 2:
                         inserirEnfermaria();
+                        break;
                     case 0:
-                        exibir();
+                        return;
                     default:
                         System.out.println("Opção inválida");
+                        break;
                 }
             } else {
                 System.out.println("Erro: Insira um número.");
@@ -337,7 +340,12 @@ public class Menu {
         Enfermaria novaEnfermaria = null;
 
         if (tipo.equals("GERAL")) {
-            System.out.print("Número máximo de acompanhantes: ");
+            System.out.print("Horário de visitas (ex: 14:00 - 16:00): ");
+            String horario = teclado.nextLine().trim();
+            while (!Validador.isHorario(horario)) {
+                System.out.print("Erro! Formato inválido. Use o padrão HH:MM - HH:MM: ");
+                horario = teclado.nextLine().trim();
+            }
             String acompTxt = teclado.nextLine();
             while (!Validador.isInteiro(acompTxt)) {
                 System.out.print("Erro! Insira um número inteiro: ");
@@ -366,8 +374,12 @@ public class Menu {
             novaEnfermaria = new EnfermariaPsiquiatrica(codigo, capacidade, horario, nivel);
 
         } else if (tipo.equals("UCI")) {
-            System.out.print("Horário de visitas: ");
+            System.out.print("Horário de visitas (ex: 14:00 - 16:00): ");
             String horario = teclado.nextLine().trim();
+            while (!Validador.isHorario(horario)) {
+                System.out.print("Erro! Formato inválido. Use o padrão HH:MM - HH:MM: ");
+                horario = teclado.nextLine().trim();
+            }
 
             System.out.print("Pressão Atmosférica Atual: ");
             String pAtmTxt = teclado.nextLine();
@@ -473,7 +485,7 @@ public class Menu {
         System.out.print("Data de Início (dd/MM/yyyy): ");
         String dataInicio = teclado.nextLine().trim();
         while (!Validador.isData(dataInicio)) {
-            System.out.print("Erro! Formato incorreto. Reintroduza a Data de Início (dd/MM/yyyy): ");
+            System.out.print("Erro! Formato incorreto. Reintroduza a Data de Início (dd/MM/yyyy) sem espaços extra: ");
             dataInicio = teclado.nextLine().trim();
         }
         LocalDate inicio = LocalDate.parse(dataInicio, Validador.FORMATO);
@@ -513,7 +525,10 @@ public class Menu {
                 mostrarGraficoVertical(enfermariaEscolhida, inicio, fim, simbolo);
                 break;
             case 0:
-                exibir();
+                System.out.println("\nA guardar o estado atual do sistema...");
+                GestorDados.guardarEstado(hospital); // <--- GRAVA AQUI
+                System.out.println("A encerrar o sistema... Até à próxima!");
+                break;
             default:
                 System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");
                 break;
