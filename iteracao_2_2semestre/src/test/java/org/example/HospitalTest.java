@@ -1,15 +1,38 @@
 package org.example;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 public class HospitalTest {
 
+    // Referência estática partilhada para o cenário global
+    private static Hospital hospitalGlobal;
+    private static LocalDate dataRef;
+
+    @BeforeAll
+    static void initAll() {
+
+        System.out.println("--- INICIANDO BATERIA DE TESTES DO HOSPITAL ---");
+
+        hospitalGlobal = new Hospital("Hospital Central de Testes");
+        dataRef = LocalDate.of(2026, 5, 30);
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+
+        System.out.println("--- TODOS OS TESTES DO HOSPITAL FORAM EXECUTADOS ---");
+        hospitalGlobal = null; // Limpa a memória
+    }
+
     @Test
-    void adicionarEnfermaria() {
+    public void testAdicionarEnfermaria() {
         Hospital hospital = new Hospital("Hospital de Teste");
         EnfermariaCI enf = new EnfermariaCI("E1", 10, "14:00-16:00", 1013.25, 1013.25);
 
@@ -23,7 +46,7 @@ public class HospitalTest {
     }
 
     @Test
-    void pesquisarEnfermaria() {
+    public void testPesquisarEnfermaria() {
         // Preparação do cenário
         Hospital hospital = new Hospital("Hospital de Teste");
         EnfermariaCI enf1 = new EnfermariaCI("E1", 10, "14:00-16:00", 1013.25, 1013.25);
@@ -42,7 +65,7 @@ public class HospitalTest {
     }
 
     @Test
-    void alterarCamasTotais() {
+    public void testAlterarCamasTotais() {
         // Testa a simulação da variação súbita de camas
         List<Enfermaria> lista = new ArrayList<>();
         EnfermariaCI enf = new EnfermariaCI("E1", 10, "14:00-16:00", 1013.25, 1013.25);
@@ -55,7 +78,7 @@ public class HospitalTest {
     }
 
     @Test
-    void calcularPercentagemEnfermariasEmPressao() {
+    public void testCalcularPercentagemEnfermariasEmPressao() {
 
         List<Enfermaria> lista = new ArrayList<>();
         LocalDate dataRef = LocalDate.of(2026, 5, 30);
@@ -76,7 +99,7 @@ public class HospitalTest {
     }
 
     @Test
-    void ordenarEnfermariasPorIndice() {
+    public void testOrdenarEnfermariasPorIndice() {
 
         List<Enfermaria> lista = new ArrayList<>();
         LocalDate dataRef = LocalDate.of(2026, 5, 30);
@@ -98,7 +121,7 @@ public class HospitalTest {
     }
 
     @Test
-    void ordenarEnfermarias() {
+    public void testOrdenarEnfermarias() {
 
         List<Enfermaria> lista = new ArrayList<>();
         EnfermariaCI enf1 = new EnfermariaCI("E1", 10, "14:00", 1013.25, 1013.25);
@@ -110,5 +133,25 @@ public class HospitalTest {
         lista.sort((e1, e2) -> e1.getCodigo().compareTo(e2.getCodigo()));
 
         assertEquals("E1", lista.get(0).getCodigo(), "A ordenação falhou.");
+    }
+
+    @Test
+    void testAlterarCamasTotaisComAssumption() {
+        // Criação de um hospital para o teste
+        Hospital hospital = new Hospital("Hospital Central");
+
+        // Adição de uma enfermaria (agora a lista já NÃO está vazia)
+        EnfermariaCI enf = new EnfermariaCI("E1", 10, "14:00", 1013.25, 1013.25);
+        hospital.getEnfermarias().add(enf);
+
+        // O metodo de alterar camas não faz nada se a lista estiver vazia.
+        // Portanto, o hospital TEM de ter pelo menos uma enfermaria para o teste fazer sentido.
+        assumeFalse(hospital.getEnfermarias().isEmpty());
+
+        // O resto do teste só corre se a lista NÃO estiver vazia
+        Hospital.alterarCamasTotais(hospital.getEnfermarias(), 20.0);
+
+        // Validação final: 10 camas + 20% = 12 camas
+        assertEquals(12, enf.getCapacidadeCamas());
     }
 }
