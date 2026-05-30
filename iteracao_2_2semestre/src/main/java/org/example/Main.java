@@ -27,7 +27,7 @@ public class Main {
     private static final String FILE_LOG = "hospital_sistema.log";
 
     /**
-     * Método principal que arranca a execução do software.
+     * Metodo principal que arranca a execução do software.
      * @param args Argumentos de linha de comandos (não utilizados).
      * @throws Exception Propagação genérica de exceções críticas de E/S.
      */
