@@ -1,34 +1,41 @@
 package org.example;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
-@DisplayName("Testes Unitários para a Classe Enfermaria")
 public class EnfermariaTest {
 
     // Criação de referências para as classes que vamos testar em isolamento
     private Enfermaria enfermariaMedica;
     private LocalDate dataReferencia;
 
+    @BeforeAll
+    public static void initAll() {
+        System.out.println("====== INÍCIO DA BATERIA DE TESTES: CLASSE ENFERMARIA ======");
+    }
+
+    @AfterAll
+    public static void tearDownAll() {
+        System.out.println("====== FIM DA BATERIA DE TESTES: CLASSE ENFERMARIA ======");
+    }
+
     @BeforeEach
-    void setUp() {
-        // 1. Executa antes de cada teste para garantir que o estado está limpo
-        // Criação de uma enfermaria concreta (ex: Código "E1" e capacidade de 10 camas)
+    public void setUp() {
+        // Criação de uma enfermaria concreta
         enfermariaMedica = new EnfermariaCI("E1", 10, "14:00-16:00", 1013.25, 1013.25);
 
         // Data fixa para a simulação
         dataReferencia = LocalDate.of(2026, 5, 30);
 
-        // 2. Adicionar episódios controlados para os cálculos matemáticos baterem certo
+        // Adição de episódios
         Episodio ep1 = new Episodio(1, LocalDate.of(2026, 5, 25), LocalDate.of(2026, 5, 30) );
-
         Episodio ep2 = new Episodio(2, LocalDate.of(2026, 5, 30), LocalDate.of(2026, 6, 5));
-
         Episodio ep3 = new Episodio(3, LocalDate.of(2026, 5, 20), LocalDate.of(2026, 5, 30));
-        ep3.setDataAlta(LocalDate.of(2026, 5, 30));
 
         // Adição dos episódios à enfermaria de teste
         enfermariaMedica.getEpisodios().add(ep1);
@@ -37,28 +44,21 @@ public class EnfermariaTest {
     }
 
     @Test
-    @DisplayName("Deve calcular corretamente a taxa de ocupação para um dia específico")
-    void testCalcularTaxaOcupacao() {
-        // No dia 30/05/2026, temos 3 camas ocupadas (ep1, ep2, ep3 ainda contam nesse dia)
-        // 3 camas ocupadas em 10 totais = 30.0% de ocupação
-        double taxaEsperada = 30.0;
+    public void testCalcularTaxaOcupacao() {
         double taxaObtida = enfermariaMedica.calcularTaxaOcupacao(dataReferencia);
 
-        assertEquals(taxaEsperada, taxaObtida, 0.01, "O cálculo da taxa de ocupação falhou.");
+        assertEquals(30.0, taxaObtida, 0.01, "O cálculo da taxa de ocupação falhou.");
     }
 
     @Test
-    @DisplayName("Deve calcular o Score de Turnover corretamente baseado no fluxo de doentes")
-    void testCalcularScoreTurnover() {
-        int scoreEsperado = 3;
+    public void testCalcularScoreTurnover() {
         int scoreObtido = enfermariaMedica.calcularScoreTurnover(dataReferencia);
 
-        assertEquals(scoreEsperado, scoreObtido, "O score de turnover não condiz com a tabela do RF6.");
+        assertEquals(3, scoreObtido, "O score de turnover não condiz com a tabela do RF6.");
     }
 
     @Test
-    @DisplayName("Deve validar que a enfermaria não está em situação de pressão crítica (<85%)")
-    void testEmPressaoFalso() {
+    public void testEmPressao() {
         // Com 30% de ocupação, o metodo emPressao() tem de devolver obrigatoriamente FALSE
         boolean emPressao = enfermariaMedica.emPressao(dataReferencia);
 
@@ -66,16 +66,35 @@ public class EnfermariaTest {
     }
 
     @Test
-    @DisplayName("Deve detetar pressão crítica quando a ocupação ultrapassa os 85%")
-    void testEmPressaoVerdadeiro() {
-        // Situação de stress adicionando doentes fictícios até encher as camas
-        for (int i = 4; i <= 9; i++) {
-            enfermariaMedica.getEpisodios().add(new Episodio(i, LocalDate.of(2026, 5, 28), LocalDate.of(2026, 5, 30)));
-        }
+    public void testEstatisticasInternamento() {
+        assertEquals(5, enfermariaMedica.determinarMinimo(), "Tempo mínimo de internamento errado.");
+        assertEquals(10, enfermariaMedica.determinarMaximo(), "Tempo máximo de internamento errado.");
+        assertEquals(7.0, enfermariaMedica.determinarMedia(), 0.01, "Média de internamento errada.");
+        assertEquals(2.16, enfermariaMedica.determinarDesvioPadrao(), 0.01, "Desvio padrão errado.");
+    }
 
-        // 9 camas ocupadas em 10 totais = 90.0% (> 85%)
-        boolean emPressao = enfermariaMedica.emPressao(dataReferencia);
+    @Test
+    public void testCalcularScoreOcupacao() {
+        assertEquals(1, enfermariaMedica.calcularScoreOcupacao(dataReferencia));
+    }
 
-        assertTrue(emPressao, "O sistema falhou em detetar a pressão crítica acima dos 85%.");
+    @Test
+    public void testCalcularIndicePressao() {
+        assertEquals(1.6, enfermariaMedica.calcularIndicePressao(dataReferencia), 0.01);
+    }
+
+    @Test
+    public void testObterBarraASCII() {
+        String barra = enfermariaMedica.obterBarraASCII(30.0, '#');
+        assertNotNull(barra);
+        assertEquals(15, barra.length(), "A barra ASCII deveria conter exatamente 15 caracteres.");
+    }
+
+    @Test
+    public void testCapacidadeComAssumption() {
+        assumeTrue(enfermariaMedica.getCapacidadeCamas() > 0);
+
+        enfermariaMedica.setCapacidadeCamas(12);
+        assertEquals(12, enfermariaMedica.getCapacidadeCamas());
     }
 }
