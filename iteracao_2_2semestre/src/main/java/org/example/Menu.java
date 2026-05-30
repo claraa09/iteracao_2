@@ -184,7 +184,7 @@ public class Menu {
             System.out.print("Erro: Formato inválido. Reintroduza a data (dd/MM/yyyy): ");
             dataLida = teclado.nextLine();
         }
-        LocalDate data = LocalDate.parse(dataLida, formato);
+        LocalDate data = Validador.converterDataSegura(dataLida);
 
         System.out.println("\nTAXA DE OCUPAÇÃO EM " + data.format(formato) + ":");
         for (Enfermaria e : hospital.getEnfermarias()) {
@@ -213,7 +213,7 @@ public class Menu {
             System.out.print("Erro: Formato inválido. Reintroduza a data de início (dd/MM/yyyy): ");
             dataInicioLida = teclado.nextLine();
         }
-        LocalDate inicio = LocalDate.parse(dataInicioLida, formato);
+        LocalDate inicio = Validador.converterDataSegura(dataInicioLida);
 
         System.out.print("Data de Fim (dd/MM/yyyy): ");
         String dataFimLida = teclado.nextLine();
@@ -221,7 +221,7 @@ public class Menu {
             System.out.print("Erro: Formato inválido. Reintroduza a data de fim (dd/MM/yyyy): ");
             dataFimLida = teclado.nextLine();
         }
-        LocalDate fim = LocalDate.parse(dataFimLida, formato);
+        LocalDate fim = Validador.converterDataSegura(dataFimLida);
 
         if (fim.isBefore(inicio)) {
             System.out.println("Erro: A data de fim não pode ser anterior à data de início.");
@@ -231,6 +231,10 @@ public class Menu {
         System.out.println("\nRESULTADO: Pressão em " + String.format("%.2f", perc) + "% do tempo.");
     }
 
+    /**
+     * Apresenta o submenu interativo para seleção do tipo de registo a inserir.
+     * Navega para os fluxos específicos de criação de episódio ou enfermaria.
+     */
     private void escolherRegisto() {
         int opcao = -1;
         do {
@@ -289,7 +293,7 @@ public class Menu {
             System.out.print("Erro! Formato inválido. Use dd/MM/yyyy: ");
             dataAdmTxt = teclado.nextLine();
         }
-        LocalDate dataAdmissao = LocalDate.parse(dataAdmTxt, Validador.FORMATO);
+        LocalDate dataAdmissao = Validador.converterDataSegura(dataAdmTxt);
 
         System.out.print("Introduza a Data de Alta (Deixe em branco se ainda internado): ");
         String dataAltaTxt = teclado.nextLine();
@@ -300,11 +304,10 @@ public class Menu {
                 System.out.print("Erro! Formato inválido. Use dd/MM/yyyy ou deixe em branco: ");
                 dataAltaTxt = teclado.nextLine();
             }
-            dataAlta = LocalDate.parse(dataAltaTxt, Validador.FORMATO);
+            dataAlta = Validador.converterDataSegura(dataAltaTxt);
         }
 
         try {
-            // CORREÇÃO AQUI: Em vez de usar os gets, usamos o método direto
             Episodio novoEp = new Episodio(idCama, dataAdmissao, dataAlta);
             alvo.adicionarEpisodio(novoEp);
 
@@ -410,6 +413,10 @@ public class Menu {
         }
     }
 
+    /**
+     * Executa o fluxo de alteração global de camas de todas as enfermarias do sistema.
+     * Solicita o fator de variação e efetua a limpeza do buffer pós-leitura de valores decimais.
+     */
     private void alterarCamas() {
         System.out.print("Insira a percentagem de alteração (ex: 10 para aumentar, -5 para diminuir): ");
         double percentagem = teclado.nextDouble();
@@ -425,7 +432,7 @@ public class Menu {
         String dataLida = teclado.nextLine();
 
         try {
-            LocalDate data = LocalDate.parse(dataLida, formato);
+            LocalDate data = Validador.converterDataSegura(dataLida);
 
             double percentagem = Hospital.calcularPercentagemEnfermariasEmPressao(hospital.getEnfermarias(), data);
 
@@ -447,7 +454,7 @@ public class Menu {
         String dataLida = teclado.nextLine();
 
         try {
-            LocalDate data = LocalDate.parse(dataLida, formato);
+            LocalDate data = Validador.converterDataSegura(dataLida);
 
             Hospital.ordenarEnfermariasPorIndice(hospital.getEnfermarias(), data);
 
@@ -488,20 +495,20 @@ public class Menu {
         }
 
         System.out.print("Data de Início (dd/MM/yyyy): ");
-        String dataInicio = teclado.nextLine().trim();
+        String dataInicio = teclado.nextLine();
         while (!Validador.isData(dataInicio)) {
             System.out.print("Erro! Formato incorreto. Reintroduza a Data de Início (dd/MM/yyyy) sem espaços extra: ");
-            dataInicio = teclado.nextLine().trim();
+            dataInicio = teclado.nextLine();
         }
-        LocalDate inicio = LocalDate.parse(dataInicio, Validador.FORMATO);
+        LocalDate inicio = Validador.converterDataSegura(dataInicio);
 
         System.out.print("Data de Fim (dd/MM/yyyy): ");
         String dataFim = teclado.nextLine();
         while (!Validador.isData(dataFim)) {
             System.out.print("Erro! Formato incorreto. Reintroduza a Data de Fim (dd/MM/yyyy): ");
-            dataFim = teclado.nextLine().trim();
+            dataFim = teclado.nextLine();
         }
-        LocalDate fim = LocalDate.parse(dataFim, Validador.FORMATO);
+        LocalDate fim = Validador.converterDataSegura(dataFim);
 
         if (fim.isBefore(inicio)) {
             System.out.println("Erro: A data de fim não pode ser anterior à data de início.");

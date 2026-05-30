@@ -9,8 +9,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Classe responsável pela leitura e extração de dados de enfermarias a partir de ficheiros CSV.
+ * Executa as validações primárias de parsing e regista anomalias num ficheiro de log.
+ *
+ * @author Clara Soares (202504216)
+ * @author Gabriela Carneiro (202505760)
+ */
 public class LeitorEnfermarias {
 
+    /**
+     * Processa um ficheiro de texto estruturado (CSV) para instanciar as subclasses de Enfermaria.
+     * @param caminho O caminho local (path) para o ficheiro CSV das enfermarias.
+     * @param log O objeto PrintWriter aberto para registar ocorrências e erros de formatação.
+     * @return Uma lista de objetos polimórficos do tipo {@link Enfermaria} gerados e validados.
+     */
     public static List<Enfermaria> lerEnfermarias(String caminho, PrintWriter log) {
         List<Enfermaria> lista = new ArrayList<>();
 

@@ -6,6 +6,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Classe principal do modelo de domínio que representa a unidade hospitalar.
+ * Centraliza a gestão de todas as enfermarias e fornece operações globais
+ * de pesquisa, cálculo de pressão e alteração de capacidades.
+ *
+ * @author Clara Soares (202504216)
+ * @author Gabriela Carneiro (202505760)
+ */
 public class Hospital implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
     /**
@@ -39,11 +47,13 @@ public class Hospital implements java.io.Serializable{
      */
     public List<Enfermaria> getEnfermarias() { return enfermarias; }
 
-    // Adiciona este método na classe Hospital
+    /**
+     * Substitui a lista de enfermarias do hospital por uma nova lista.
+     * @param enfermarias A nova lista de enfermarias a associar ao hospital.
+     */
     public void setEnfermarias(List<Enfermaria> enfermarias) {
         this.enfermarias = enfermarias;
     }
-
 
     /**
      * Ordena a lista global de enfermarias com base no critério de ocupação
@@ -83,6 +93,12 @@ public class Hospital implements java.io.Serializable{
         return (totalDias == 0) ? 0.0 : ((double) diasEmPressao / totalDias) * 100;
     }
 
+    /**
+     * Altera a capacidade total de camas de uma lista de enfermarias aplicando uma percentagem de variação.
+     * Garante que a capacidade nunca assume valores negativos.
+     * @param listaEnfermarias Lista de enfermarias a alterar.
+     * @param percentagemVariacao Valor percentual da alteração (positivo para aumentar, negativo para diminuir).
+     */
     public static void alterarCamasTotais(List<Enfermaria> listaEnfermarias, double percentagemVariacao) {
         if (listaEnfermarias == null || listaEnfermarias.isEmpty()) {
             return;
@@ -101,6 +117,13 @@ public class Hospital implements java.io.Serializable{
         }
     }
 
+    /**
+     * Calcula a percentagem de enfermarias de uma dada lista que se encontram em situação
+     * de pressão hospitalar numa data específica.
+     * @param lista Lista de enfermarias a analisar.
+     * @param dataRef Data de referência para o cálculo.
+     * @return Percentagem (0.0 a 100.0) de enfermarias em pressão.
+     */
     public static double calcularPercentagemEnfermariasEmPressao(List<Enfermaria> lista, LocalDate dataRef) {
         if (lista == null || lista.isEmpty()) {
             return 0.0;
@@ -108,20 +131,18 @@ public class Hospital implements java.io.Serializable{
 
         int contadorPressao = 0;
 
-        // Percorre a lista que veio por parâmetro (já não usa 'this')
         for (Enfermaria enf : lista) {
             if (enf.emPressao(dataRef)) {
                 contadorPressao++;
             }
         }
-
         return ((double) contadorPressao / lista.size()) * 100.0;
     }
 
     /**
      * Procura uma enfermaria na lista do hospital através do seu código identificador.
      * @param codigo O código da enfermaria a pesquisar (ex: "E01").
-     * @return O objeto Enfermaria encontrado, ou null se não existir.
+     * @return O objeto {@link Enfermaria} encontrado, ou null se não existir.
      */
     public Enfermaria pesquisarEnfermaria(String codigo) {
         if (codigo == null || this.enfermarias == null) {
@@ -135,10 +156,15 @@ public class Hospital implements java.io.Serializable{
                 return e; // Encontrou! Devolve a enfermaria imediatamente
             }
         }
-
         return null; // Se percorreu tudo e não encontrou, devolve null
     }
 
+    /**
+     * Ordena uma lista de enfermarias por ordem decrescente do seu Índice de Pressão
+     * calculado para uma data específica. Utiliza um Comparator anónimo.
+     * @param enfermarias Lista de enfermarias a ordenar.
+     * @param data Data de referência para calcular o índice de cada enfermaria.
+     */
     public static void ordenarEnfermariasPorIndice(List<Enfermaria> enfermarias, LocalDate data){
         Collections.sort(enfermarias, Collections.reverseOrder(new Comparator<Enfermaria>() {
             @Override
@@ -155,6 +181,11 @@ public class Hospital implements java.io.Serializable{
             }
         }));
     }
+
+    /**
+     * Adiciona uma nova enfermaria diretamente à lista definitiva do hospital.
+     * @param novaEnf O objeto {@link Enfermaria} a ser inserido.
+     */
     public void adicionarEnfermaria(Enfermaria novaEnf) {
         if (novaEnf != null) {
             this.enfermarias.add(novaEnf); // Adiciona diretamente à lista real e definitiva

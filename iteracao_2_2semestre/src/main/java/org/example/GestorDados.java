@@ -2,11 +2,20 @@ package org.example;
 
 import java.io.*;
 
+/**
+ * Classe utilitária responsável pela persistência binária do estado do sistema.
+ * Implementa a serialização e desserialização do objeto principal (Hospital)
+ * e todas as suas dependências em memória.
+ *
+ * @author Clara Soares (202504216)
+ * @author Gabriela Carneiro (202505760)
+ */
 public class GestorDados {
     private static final String FICHEIRO_BINARIO = "hospital_estado.dat";
 
     /**
-     * Serializa (Grava) o estado completo do Hospital no disco.
+     * Serializa o estado completo do Hospital guardando-o num ficheiro binário local.
+     * @param hospital O objeto raiz {@link Hospital} a ser guardado.
      */
     public static void guardarEstado(Hospital hospital) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FICHEIRO_BINARIO))) {
@@ -18,7 +27,8 @@ public class GestorDados {
     }
 
     /**
-     * Deserializa (Lê) o estado do Hospital do disco.
+     * Desserializa o estado do Hospital a partir do ficheiro binário local.
+     * @return O objeto {@link Hospital} recuperado, ou null se o ficheiro não existir ou falhar a leitura.
      */
     public static Hospital carregarEstado() {
         File f = new File(FICHEIRO_BINARIO);

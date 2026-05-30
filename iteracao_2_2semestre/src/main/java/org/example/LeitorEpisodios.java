@@ -1,16 +1,27 @@
 package org.example;
 
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Classe responsável pela importação do histórico de episódios de internamento.
+ * Associa cada episódio lido do CSV à sua respetiva enfermaria na memória do sistema.
+ *
+ * @author Clara Soares (202504216)
+ * @author Gabriela Carneiro (202505760)
+ */
 public class LeitorEpisodios {
 
-    // Repara que recebe o caminho E o objeto hospital
+    /**
+     * Processa um ficheiro CSV contendo os dados de internamento e distribui
+     * os episódios criados pelas enfermarias correspondentes no Hospital.
+     * @param caminho O caminho local para o ficheiro CSV dos episódios.
+     * @param hospital O objeto Hospital cujas enfermarias vão receber os episódios.
+     * @param log O objeto PrintWriter para gravação de erros de correspondência ou parsing.
+     * @throws FileNotFoundException Se o ficheiro indicado no caminho não existir.
+     */
     public static void lerEpisodios(String caminho, Hospital hospital, PrintWriter log) throws FileNotFoundException {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
