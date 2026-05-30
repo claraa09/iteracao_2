@@ -413,6 +413,7 @@ public class Menu {
     private void alterarCamas() {
         System.out.print("Insira a percentagem de alteração (ex: 10 para aumentar, -5 para diminuir): ");
         double percentagem = teclado.nextDouble();
+        teclado.nextLine();
 
         Hospital.alterarCamasTotais(hospital.getEnfermarias(), percentagem);
 
@@ -529,9 +530,6 @@ public class Menu {
                 mostrarGraficoVertical(enfermariaEscolhida, inicio, fim, simbolo);
                 break;
             case 0:
-                System.out.println("\nA guardar o estado atual do sistema...");
-                GestorDados.guardarEstado(hospital); // <--- GRAVA AQUI
-                System.out.println("A encerrar o sistema... Até à próxima!");
                 return;
             default:
                 System.out.println("Opção inválida. Escolha 1 (Horizontal) ou 2 (Vertical).");

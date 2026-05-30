@@ -112,7 +112,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
 
     public String obterBarraASCII (double percentagem, char simbolo){
         if (percentagem <0) {
-            double pergentagem = 0;
+            percentagem = 0;
         }
 
         int numCaracteres = (int) Math.round ((percentagem*50)/100);
