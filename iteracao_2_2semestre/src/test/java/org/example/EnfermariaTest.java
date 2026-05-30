@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Testes Unitários para a Classe Enfermaria") // Anotação do slide pág. 17
+@DisplayName("Testes Unitários para a Classe Enfermaria")
 public class EnfermariaTest {
 
-    // Criamos referências para as classes que vamos testar em isolamento
+    // Criação de referências para as classes que vamos testar em isolamento
     private Enfermaria enfermariaMedica;
     private LocalDate dataReferencia;
 
