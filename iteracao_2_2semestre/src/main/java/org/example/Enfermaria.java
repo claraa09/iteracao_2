@@ -47,6 +47,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
      * @return String contendo o código (ex: "E01").
      */
     public String getCodigo(){return codigo;}
+
     /**
      * Devolve a capacidade total de camas configurada para esta unidade.
      * @return O número total de camas disponíveis.
@@ -54,6 +55,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     public int getCapacidadeCamas(){
         return capacidadeCamas;
     }
+
     /**
      * Devolve a lista de todos os episódios de internamento associados a esta enfermaria.
      * @return Uma List contendo os objetos {@link Episodio}.
@@ -61,16 +63,12 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     public List<Episodio> getEpisodios(){
         return episodios;
     }
+
     /**
      * Atualiza a capacidade total de camas da enfermaria.
      * @param capacidadeCamas O novo número de camas disponíveis.
      */
     public void setCapacidadeCamas(int capacidadeCamas){this.capacidadeCamas = capacidadeCamas;}
-    /**
-     * Substitui a lista atual de episódios de internamento por uma nova lista.
-     * @param episodios A nova lista de objetos {@link Episodio} a associar à unidade.
-     */
-    public void setEpisodios(List<Episodio> episodios){this.episodios=episodios;}
 
     /**
      * Calcula o número de camas ocupadas numa determinada data de referência.
@@ -166,7 +164,8 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     }
 
     /**
-     * Ordena a lista de episódios da enfermaria utilizando a ordenação natural da classe Episodio.
+     * Ordena a lista interna de episódios utilizando a ordenação natural da classe Episodio
+     * (por data de admissão).
      */
     public void ordenarEpisodios() {
         if (this.episodios != null && !this.episodios.isEmpty()) {
@@ -176,6 +175,7 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
 
     /**
      * Filtra a lista global de episódios devolvendo apenas aqueles que já receberam alta.
+     * Método auxiliar para os cálculos de estatísticas de internamento.
      * @return Lista de episódios finalizados.
      */
     private List<Episodio> getEpisodiosAltas(){
@@ -259,9 +259,9 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     }
 
     /**
-     * Calcula o score de ocupação (1-5) para uma da    ta de referência.
-     * @param data Data de referência
-     * @return Score entre 1 e 5
+     * Atribui uma pontuação de ocupação numa escala de 1 a 5 com base nos limiares críticos.
+     * @param data Data de referência para análise da taxa de ocupação.
+     * @return Um valor inteiro entre 1 e 5 indicando o nível de esforço da unidade.
      */
     public int calcularScoreOcupacao(LocalDate data){
 
@@ -281,10 +281,10 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     }
 
     /**
-     * Calcula o score de turnover (1-5) para uma data de referência.
-     * percTurnover = (admissões + altas) / camasTotais × 100
-     * @param data Data de referência
-     * @return Score entre 1 e 5
+     * Calcula a pontuação de turnover (rotatividade de camas) numa escala de 1 a 5.
+     * A fórmula reflete o fluxo de entradas e saídas diárias em relação à capacidade.
+     * @param data Data de referência para contagem de movimentos (admissões e altas).
+     * @return Um valor inteiro de 1 a 5 representativo do dinamismo da unidade.
      */
     public int calcularScoreTurnover(LocalDate data) {
         int admissoes = 0;
@@ -315,16 +315,19 @@ public abstract class Enfermaria implements Comparable<Enfermaria>, java.io.Seri
     }
 
     /**
-     * Calcula o Índice de Pressão (1-5) com 1 casa decimal.
-     * Índice = 0.7 × scoreOcupação + 0.3 × scoreTurnover
-     * @param data Data de referência
-     * @return Índice de pressão
+     * Determina o Índice de Pressão ponderado, combinando a ocupação (70%) e o turnover (30%).
+     * @param data Data de análise hospitalar.
+     * @return Valor decimal arredondado a uma casa decimal representativo do Índice.
      */
     public double calcularIndicePressao(LocalDate data) {
         double indice = 0.7 * calcularScoreOcupacao(data) + 0.3 * calcularScoreTurnover(data);
         return Math.round(indice * 10.0) / 10.0;// Arredonda o índice para 1 casa decimal
     }
 
+    /**
+     * Adiciona um novo episódio diretamente à lista definitiva desta enfermaria.
+     * @param novoEp O objeto {@link Episodio} a ser inserido.
+     */
     public void adicionarEpisodio(Episodio novoEp) {
         if (novoEp != null) {
             this.episodios.add(novoEp); // Adiciona diretamente à lista real e definitiva

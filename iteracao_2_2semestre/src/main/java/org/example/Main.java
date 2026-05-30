@@ -2,18 +2,17 @@ package org.example;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.FileNotFoundException;
 
 /**
  * Classe principal de entrada (Entry Point) do sistema hospitalar.
- * Esta classe é responsável por orquestrar a inicialização do hospital,
- * gerir o carregamento de dados a partir de ficheiros externos e
- * instanciar a interface de utilizador (Menu).
- * @author Gabriela Carneiro (202505760)
+ * Orquestra a inicialização da aplicação: tenta recuperar o estado de uma
+ * sessão anterior (Serialização) ou importa a configuração base via CSV.
+ *
  * @author Clara Soares (202504216)
+ * @author Gabriela Carneiro (202505760)
  */
 public class Main {
-    // O carregamento "estático" porque os nomes não mudam durante a execução.
+
     /**
      * Caminho fixo para o ficheiro que contém os dados das enfermarias
      */
@@ -27,6 +26,11 @@ public class Main {
      */
     private static final String FILE_LOG = "hospital_sistema.log";
 
+    /**
+     * Método principal que arranca a execução do software.
+     * @param args Argumentos de linha de comandos (não utilizados).
+     * @throws Exception Propagação genérica de exceções críticas de E/S.
+     */
     public static void main(String[] args) throws Exception {
         System.out.println(">>> [SISTEMA] A iniciar o programa...");
 

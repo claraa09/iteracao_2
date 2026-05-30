@@ -29,7 +29,8 @@ public class Episodio implements Comparable<Episodio>, Serializable {
      * Construtor completo para a criação de um episódio de internamento.
      * @param idCama Identificador da cama atribuída.
      * @param dataAdmissao Data de início do internamento.
-     * @param dataAlta Data de fim do internamento (null se ainda internado).
+     * @param dataAlta Data de fim do internamento (null se o internamento estiver em curso).
+     * @throws IllegalArgumentException Se a data de alta for cronologicamente anterior à data de admissão.
      */
     public Episodio(int idCama, LocalDate dataAdmissao, LocalDate dataAlta) {
 
@@ -48,13 +49,7 @@ public class Episodio implements Comparable<Episodio>, Serializable {
     public int getIdCama() {
         return idCama;
     }
-    /**
-     * Define o identificador da cama para este episódio de internamento.
-     * @param idCama O número da cama a atribuir.
-     */
-    public void setIdCama(int idCama) {
-        this.idCama = idCama;
-    }
+
     /**
      * Devolve a data em que o paciente deu entrada na enfermaria.
      * @return Objeto {@link LocalDate} com a data de admissão.
@@ -62,26 +57,13 @@ public class Episodio implements Comparable<Episodio>, Serializable {
     public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
-    /**
-     * Define a data de admissão do paciente.
-     * @param dataAdmissao A data de início do episódio.
-     */
-    public void setDataAdmissao(LocalDate dataAdmissao) {
-        this.dataAdmissao = dataAdmissao;
-    }
+
     /**
      * Devolve a data em que o paciente teve alta da unidade.
      * @return Objeto {@link LocalDate} com a data de alta, ou null se o paciente ainda estiver internado.
      */
     public LocalDate getDataAlta() {
         return dataAlta;
-    }
-    /**
-     * Define a data de alta do paciente, finalizando o episódio de internamento.
-     * @param dataAlta A data de fim do episódio.
-     */
-    public void setDataAlta(LocalDate dataAlta) {
-        this.dataAlta = dataAlta;
     }
 
     /**
